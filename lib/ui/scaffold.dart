@@ -18,6 +18,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fl_clash/providers/providers.dart';
 
 import 'builder.dart';
 import 'button.dart';
@@ -46,6 +48,11 @@ class CommonScaffold extends StatefulWidget {
   final Color? backgroundColor;
   final String? title;
   final Widget? titleWidget;
+
+  /// How tall the bar stands when the page brings its own [titleWidget], for a
+  /// page whose bar is shorter than a title alone would make it. The body's
+  /// top inset follows it, so the content starts right under the bar.
+  final double? barHeight;
   final List<CommonPopupMenuItem> titleMenuItems;
   final bool isLoading;
   final List<Widget>? actions;
@@ -83,6 +90,7 @@ class CommonScaffold extends StatefulWidget {
     this.backgroundColor,
     this.title,
     this.titleWidget,
+    this.barHeight,
     this.titleMenuItems = const [],
     this.actions,
     this.backAction,
@@ -742,11 +750,21 @@ class CommonScaffoldState extends State<CommonScaffold>
   }
 
   Widget _buildFloatingHeader(Widget appBar) {
+    // Over the frosted pane Loon-style bars carry no scrim at all: the title
+    // and config name simply float on the glass as plain text, so the bar
+    // stays one continuous sheet with the window. The gradient scrim would
+    // only help on a solid (non-glass) background, where it still shields
+    // content scrolling under the bar — there it is kept.
+    final glass = ProviderScope.containerOf(
+      context,
+    ).read(glassPaneProvider);
+    if (glass) {
+      return appBar;
+    }
     final top = MediaQuery.paddingOf(context).top;
+    final pageColor = SurfaceLevel.page.colorOf(context.colorScheme);
     return FloatingHeader(
-      backgroundColor:
-          widget.backgroundColor ??
-          SurfaceLevel.page.colorOf(context.colorScheme),
+      backgroundColor: widget.backgroundColor ?? pageColor,
       fadeStart: top / (top + pageToolbarHeight),
       overhang: _headerOverhang,
       child: appBar,
@@ -767,10 +785,11 @@ class CommonScaffoldState extends State<CommonScaffold>
     );
     // Under a sheet the bar drops its actions, so none reads as the sheet's.
     final uncovered = ReverseAnimation(sheetCoverOf(context));
+    final barHeight = isCompact
+        ? sheetToolbarHeight
+        : widget.barHeight ?? pageToolbarHeight;
     return PreferredSize(
-      preferredSize: Size.fromHeight(
-        isCompact ? sheetToolbarHeight : pageToolbarHeight,
-      ),
+      preferredSize: Size.fromHeight(barHeight),
       child: Stack(
         alignment: Alignment.bottomCenter,
         clipBehavior: Clip.none,
@@ -813,7 +832,9 @@ class CommonScaffoldState extends State<CommonScaffold>
                 automaticallyImplyLeading: false,
                 animateColor: true,
                 forceMaterialTransparency: true,
-                toolbarHeight: isCompact ? sheetToolbarHeight : null,
+                toolbarHeight: isCompact
+                    ? sheetToolbarHeight
+                    : widget.barHeight,
                 centerTitle: isCompact,
                 titleTextStyle: compactTitle
                     ? AppTextStyle.headline.of(context)
@@ -934,7 +955,11 @@ class CommonScaffoldState extends State<CommonScaffold>
             ],
           );
           return TopInsetScope(
-            inset: hasKeywords ? 0 : TopInsetScope.of(context),
+            inset: hasKeywords
+                ? 0
+                : widget.barHeight == null
+                ? TopInsetScope.of(context)
+                : widget.barHeight! + 12,
             child: FloatingBarScope(
               inset: overlap,
               child: overlap > 0
@@ -958,6 +983,11 @@ class CommonScaffoldState extends State<CommonScaffold>
         child: Scaffold(
           appBar: appBar,
           extendBodyBehindAppBar: barFloats,
+          // The home pane paints the page once for the whole window; a page
+          // inside it stays clear so no second tint meets the sidebar's.
+          backgroundColor: PaneBackdropScope.drawsPageOf(context)
+              ? Colors.transparent
+              : widget.backgroundColor,
           body: _BodyScope(
             child: docked == null
                 ? content
@@ -974,7 +1004,6 @@ class CommonScaffoldState extends State<CommonScaffold>
                   ),
           ),
           resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-          backgroundColor: widget.backgroundColor,
         ),
       );
     }

@@ -209,7 +209,7 @@
   "pureBlackMode": "Pure black mode",
   "sidebar": "Sidebar",
   "backgroundBlur": "Background blur",
-  "sidebarBlurDesc": "Background blur lets the desktop behind the window show through the sidebar.",
+  "sidebarBlurDesc": "Background blur lets the desktop behind the window show through the whole interface as a frosted glass layer.",
   "liquidGlass": "Liquid Glass",
   "keepAliveIntervalDesc": "TCP keep-alive interval",
   "entries": " entries",
@@ -556,6 +556,7 @@
   "vpnConfigChangeDetected": "VPN-related configuration change detected",
   "restart": "Restart",
   "speedStatistics": "Speed statistics",
+  "speed": "Speed",
   "resetPageChangesTip": "This page has changes. Are you sure you want to reset?",
   "customProfile": "Custom",
   "customProfileResources": "Custom profile resources",
@@ -963,5 +964,13 @@
   "preferred": "Preferred",
   "addToLocalProxies": "Add to local proxies",
   "addedToLocalProxies": "Added {name} to local proxies",
-  "alreadyInLocalProxies": "{name} is already in local proxies"
+  "alreadyInLocalProxies": "{name} is already in local proxies",
+  "nodeHealth": "Node health",
+  "proxy": "Proxy",
+  "reject": "Reject",
+  "sessionConnections": "Session connections",
+  "quickSwitches": "Quick switches",
+  "activeProcesses": "Active processes",
+  "networkEnvironment": "Network environment",
+  "currentNode": "Current node"
 }

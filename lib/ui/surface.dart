@@ -56,6 +56,31 @@ class _SurfaceLevelScope extends InheritedWidget {
       level != oldWidget.level;
 }
 
+/// The home pane paints the page color once for the whole window, sidebar
+/// included, so the cards and pages inside it stay clear and the pane reads
+/// as one frosted surface. Routes pushed above the pane never see this scope
+/// and keep drawing their own backgrounds.
+class PaneBackdropScope extends StatelessWidget {
+  const PaneBackdropScope({super.key, required this.child});
+
+  final Widget child;
+
+  static bool drawsPageOf(BuildContext context) =>
+      context.getInheritedWidgetOfExactType<_PaneBackdropMarker>() != null;
+
+  @override
+  Widget build(BuildContext context) {
+    return _PaneBackdropMarker(child: child);
+  }
+}
+
+class _PaneBackdropMarker extends InheritedWidget {
+  const _PaneBackdropMarker({required super.child});
+
+  @override
+  bool updateShouldNotify(_PaneBackdropMarker oldWidget) => false;
+}
+
 extension SurfaceContext on BuildContext {
   SurfaceLevel get surfaceLevel => SurfaceScope.of(this);
 

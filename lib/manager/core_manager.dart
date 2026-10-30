@@ -144,6 +144,10 @@ class _CoreContainerState extends ConsumerState<CoreManager>
   void onRequest(TrackerInfo trackerInfo) async {
     ref.read(requestsProvider.notifier).addRequest(trackerInfo);
     ref.read(requestCountProvider.notifier).update((count) => count + 1);
+    // Counted here rather than from a poll of the live list: a connection that
+    // opens and closes between two polls would otherwise never be counted, and
+    // the card's number would fall back as connections close.
+    ref.read(sessionConnectionsProvider.notifier).add(trackerInfo);
     super.onRequest(trackerInfo);
   }
 

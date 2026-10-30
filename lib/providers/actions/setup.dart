@@ -239,6 +239,13 @@ class SetupAction extends _$SetupAction {
     resetCoreTraffic();
     ref.read(trafficsProvider.notifier).clear();
     ref.read(totalTrafficProvider.notifier).value = const Traffic();
+    ref.read(trafficTotalsProvider.notifier).value = (
+      all: const Traffic(),
+      proxy: const Traffic(),
+    );
+    // A stop ends the run, so the connections it opened are no longer this
+    // session's: the count starts over with the next start, as Loon's does.
+    ref.read(sessionConnectionsProvider.notifier).reset();
     // A silent Core is gone or hung; running again would proxy traffic to it.
     if (!answered) {
       throw _unanswered(CoreMethod.stopListener);

@@ -44,6 +44,12 @@ ThemeData watchAppTheme(WidgetRef ref, Brightness brightness) {
     themeSettingProvider.select((state) => state.fontFamily),
   );
   final colorScheme = ref.watch(genColorSchemeProvider(brightness));
+  // Over the material the native window draws, the page keeps part of itself
+  // clear so the whole window reads as one frosted pane.
+  final backdrop = ref.watch(windowBlurProvider);
+  final scheme = backdrop == null
+      ? colorScheme
+      : colorScheme.withGlassPage(backdrop);
   final locales = [
     ?getLocaleForString(locale),
     ...WidgetsBinding.instance.platformDispatcher.locales,
@@ -51,7 +57,7 @@ ThemeData watchAppTheme(WidgetRef ref, Brightness brightness) {
   final inputs = (
     platform: defaultTargetPlatform,
     fontFamily: fontFamily,
-    colorScheme: colorScheme,
+    colorScheme: scheme,
     locales: locales.join(','),
   );
   if (_appThemes[brightness] case (
@@ -64,7 +70,7 @@ ThemeData watchAppTheme(WidgetRef ref, Brightness brightness) {
     useMaterial3: true,
     pageTransitionsTheme: _pageTransitionsTheme,
     actionIconTheme: _actionIconTheme,
-    colorScheme: colorScheme,
+    colorScheme: scheme,
     fontFamily: fontFamily,
     fontFamilyFallback: appFontFamilyFallback(
       platform: defaultTargetPlatform,
@@ -72,8 +78,7 @@ ThemeData watchAppTheme(WidgetRef ref, Brightness brightness) {
       fontFamily: fontFamily,
     ),
     extensions: [
-      if (brightness == Brightness.dark)
-        ElevatedColorScheme(colorScheme.elevated),
+      if (brightness == Brightness.dark) ElevatedColorScheme(scheme.elevated),
     ],
   ).withAppShapes.withAppSurfaces.withAppTypography;
   _appThemes[brightness] = (inputs: inputs, theme: theme);

@@ -138,7 +138,19 @@ List<TrackerInfo> trackerInfosOf(Object? data) {
 
 typedef RequestTraffic = ({int upload, int download});
 
+/// How many connections this session has opened, split by where the head of
+/// each connection's chain sent it. A count of what the Core opened rather
+/// than of what is open right now, which is what makes it only ever grow.
+typedef ConnectionSplit = ({int direct, int proxy, int reject});
+
 extension TrackerInfoExt on TrackerInfo {
+  /// Where the head of the chain sent this connection.
+  String get route => chains.isEmpty ? '' : chains.first;
+
+  bool get isDirectRoute => route == 'DIRECT' || route.isEmpty;
+
+  bool get isRejectRoute => route == 'REJECT' || route == 'REJECT-DROP';
+
   String get title {
     final host = metadata.host;
     if (host.isNotEmpty) {

@@ -209,7 +209,7 @@
   "pureBlackMode": "ピュアブラックモード",
   "sidebar": "サイドバー",
   "backgroundBlur": "背景のぼかし",
-  "sidebarBlurDesc": "背景のぼかしでは、ウィンドウの背後のデスクトップがサイドバー越しに見えます。",
+  "sidebarBlurDesc": "背景のぼかしは、ウィンドウの背後のデスクトップがインターフェース全体にすりガラスのように透けて見えます。",
   "liquidGlass": "リキッドグラス",
   "keepAliveIntervalDesc": "TCPキープアライブ間隔",
   "entries": " 件",
@@ -556,6 +556,7 @@
   "vpnConfigChangeDetected": "VPN関連の設定変更を検出しました",
   "restart": "再起動",
   "speedStatistics": "速度統計",
+  "speed": "速度",
   "resetPageChangesTip": "このページには変更があります。リセットしてもよろしいですか？",
   "customProfile": "カスタム",
   "customProfileResources": "カスタムプロファイルのリソース",
@@ -963,5 +964,13 @@
   "preferred": "優先",
   "addToLocalProxies": "ローカルプロキシに追加",
   "addedToLocalProxies": "{name} をローカルプロキシに追加しました",
-  "alreadyInLocalProxies": "{name} はすでにローカルプロキシにあります"
+  "alreadyInLocalProxies": "{name} はすでにローカルプロキシにあります",
+  "nodeHealth": "ノードの状態",
+  "proxy": "プロキシ",
+  "reject": "拒否",
+  "sessionConnections": "今回の接続",
+  "quickSwitches": "クイック切替",
+  "activeProcesses": "アクティブなプロセス",
+  "networkEnvironment": "ネットワーク環境",
+  "currentNode": "現在のノード"
 }

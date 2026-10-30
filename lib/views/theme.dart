@@ -41,7 +41,9 @@ class ThemeView extends StatelessWidget {
           const SizedBox(height: 16),
           const _LiquidGlassItem(),
           const SizedBox(height: 16),
-          if (system.isMacOS || system.isWindows) ...const [
+          // macOS keeps the frosted pane unconditionally (see glassPane), so
+          // the switch only has a meaning where the material is optional.
+          if (system.isWindows) ...const [
             _SidebarBlurItem(),
             SizedBox(height: 16),
           ],

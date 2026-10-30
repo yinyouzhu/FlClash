@@ -236,6 +236,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionTun": MessageLookupByLibrary.simpleMessage("TUN"),
     "actionUpdateProfiles": MessageLookupByLibrary.simpleMessage("プロファイルを更新"),
     "actionView": MessageLookupByLibrary.simpleMessage("表示/非表示"),
+    "activeProcesses": MessageLookupByLibrary.simpleMessage("アクティブなプロセス"),
     "add": MessageLookupByLibrary.simpleMessage("追加"),
     "addCustomProxy": MessageLookupByLibrary.simpleMessage("プロキシを追加"),
     "addFilters": MessageLookupByLibrary.simpleMessage("フィルターを追加"),
@@ -456,6 +457,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "create": MessageLookupByLibrary.simpleMessage("作成"),
     "createProfileFromUrlTip": m7,
     "creationTime": MessageLookupByLibrary.simpleMessage("作成日時"),
+    "currentNode": MessageLookupByLibrary.simpleMessage("現在のノード"),
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "起動ボタンがあるため削除できません",
     ),
@@ -1023,6 +1025,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "networkConnectionError": MessageLookupByLibrary.simpleMessage(
       "サーバーに接続できませんでした。ネットワーク接続またはプロキシ設定を確認してください",
     ),
+    "networkEnvironment": MessageLookupByLibrary.simpleMessage("ネットワーク環境"),
     "networkHostLookupError": MessageLookupByLibrary.simpleMessage(
       "サーバーのアドレスを解決できませんでした。URL が正しいこと、DNS が使えることを確認してください",
     ),
@@ -1053,6 +1056,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noResolve": MessageLookupByLibrary.simpleMessage("IPを解決しない"),
     "noResolveHostname": MessageLookupByLibrary.simpleMessage("ホスト名を解決しない"),
     "noSearchResults": MessageLookupByLibrary.simpleMessage("一致する結果はありません"),
+    "nodeHealth": MessageLookupByLibrary.simpleMessage("ノードの状態"),
     "nodes": MessageLookupByLibrary.simpleMessage("ノード"),
     "nonTextProviderFile": MessageLookupByLibrary.simpleMessage(
       "この外部リソースはテキストファイルではありません",
@@ -1175,6 +1179,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "proxiesProfileLabel": m67,
     "proxiesRemovedTip": m68,
     "proxiesReplacedTip": m69,
+    "proxy": MessageLookupByLibrary.simpleMessage("プロキシ"),
     "proxyChains": MessageLookupByLibrary.simpleMessage("プロキシチェーン"),
     "proxyGroup": MessageLookupByLibrary.simpleMessage("プロキシグループ"),
     "proxyGroupEmpty": MessageLookupByLibrary.simpleMessage("プロキシグループが空です"),
@@ -1198,12 +1203,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "quickActions": MessageLookupByLibrary.simpleMessage("クイック操作"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("クイック編集"),
+    "quickSwitches": MessageLookupByLibrary.simpleMessage("クイック切替"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("最近のリクエスト"),
     "recommendedIcons": MessageLookupByLibrary.simpleMessage("おすすめ"),
     "recordType": MessageLookupByLibrary.simpleMessage("レコードタイプ"),
     "redirPort": MessageLookupByLibrary.simpleMessage("Redirポート"),
     "redo": MessageLookupByLibrary.simpleMessage("やり直す"),
     "regex": MessageLookupByLibrary.simpleMessage("正規表現"),
+    "reject": MessageLookupByLibrary.simpleMessage("拒否"),
     "releaseMemory": MessageLookupByLibrary.simpleMessage("メモリを解放"),
     "releaseMemoryFailed": MessageLookupByLibrary.simpleMessage(
       "メモリの解放に失敗しました",
@@ -1454,6 +1461,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "serviceStatus": MessageLookupByLibrary.simpleMessage("サービスの状態"),
     "serviceUnavailable": MessageLookupByLibrary.simpleMessage("利用不可"),
     "serviceUnsupportedRegion": MessageLookupByLibrary.simpleMessage("対象外の地域"),
+    "sessionConnections": MessageLookupByLibrary.simpleMessage("今回の接続"),
     "settingEntries": MessageLookupByLibrary.simpleMessage("設定項目"),
     "settings": MessageLookupByLibrary.simpleMessage("設定"),
     "settingsCount": m77,
@@ -1473,7 +1481,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "showPassword": MessageLookupByLibrary.simpleMessage("パスワードを表示"),
     "sidebar": MessageLookupByLibrary.simpleMessage("サイドバー"),
     "sidebarBlurDesc": MessageLookupByLibrary.simpleMessage(
-      "背景のぼかしでは、ウィンドウの背後のデスクトップがサイドバー越しに見えます。",
+      "背景のぼかしは、ウィンドウの背後のデスクトップがインターフェース全体にすりガラスのように透けて見えます。",
     ),
     "silentLaunch": MessageLookupByLibrary.simpleMessage("サイレント起動"),
     "silentLaunchDesc": MessageLookupByLibrary.simpleMessage(
@@ -1508,6 +1516,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "specialProxy": MessageLookupByLibrary.simpleMessage("特殊プロキシ"),
     "specialRules": MessageLookupByLibrary.simpleMessage("特殊ルール"),
     "spectrum": MessageLookupByLibrary.simpleMessage("スペクトル"),
+    "speed": MessageLookupByLibrary.simpleMessage("速度"),
     "speedStatistics": MessageLookupByLibrary.simpleMessage("速度統計"),
     "splitStrategy": MessageLookupByLibrary.simpleMessage("振り分け戦略"),
     "splitStrategyNotEmpty": MessageLookupByLibrary.simpleMessage(

@@ -209,7 +209,7 @@
   "pureBlackMode": "Modo negro puro",
   "sidebar": "Barra lateral",
   "backgroundBlur": "Desenfoque de fondo",
-  "sidebarBlurDesc": "El desenfoque de fondo deja ver el escritorio detrás de la ventana a través de la barra lateral.",
+  "sidebarBlurDesc": "El desenfoque de fondo deja ver el escritorio detrás de la ventana a través de toda la interfaz, como un vidrio esmerilado.",
   "liquidGlass": "Liquid Glass",
   "keepAliveIntervalDesc": "Intervalo de keep-alive TCP",
   "entries": " entradas",
@@ -556,6 +556,7 @@
   "vpnConfigChangeDetected": "Se detectó un cambio en la configuración relacionada con la VPN",
   "restart": "Reiniciar",
   "speedStatistics": "Estadísticas de velocidad",
+  "speed": "Velocidad",
   "resetPageChangesTip": "Esta página tiene cambios. ¿Seguro que quieres restablecer?",
   "customProfile": "Personalizado",
   "customProfileResources": "Recursos de perfil personalizado",
@@ -963,5 +964,13 @@
   "preferred": "Preferido",
   "addToLocalProxies": "Añadir a proxies locales",
   "addedToLocalProxies": "{name} añadido a proxies locales",
-  "alreadyInLocalProxies": "{name} ya está en proxies locales"
+  "alreadyInLocalProxies": "{name} ya está en proxies locales",
+  "nodeHealth": "Estado del nodo",
+  "proxy": "Proxy",
+  "reject": "Rechazar",
+  "sessionConnections": "Conexiones de la sesión",
+  "quickSwitches": "Interruptores rápidos",
+  "activeProcesses": "Procesos activos",
+  "networkEnvironment": "Red",
+  "currentNode": "Nodo actual"
 }

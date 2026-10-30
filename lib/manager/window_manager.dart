@@ -86,6 +86,7 @@ class _WindowContainerState extends ConsumerState<WindowManager>
     if (!mounted || revision != _windowBlurRevision) {
       return;
     }
+    commonPrint.log('Window blur ${request.enabled}: opacity $opacity');
     ref.read(windowBlurProvider.notifier).value = opacity;
   }
 

@@ -50,7 +50,7 @@ final class ServiceStatusProvider
   }
 }
 
-String _$serviceStatusHash() => r'e2c34347423e8589bd1657cd6a37acc5ae6ac76e';
+String _$serviceStatusHash() => r'076c99615d25dd918f696aca65122f504f1551ec';
 
 abstract class _$ServiceStatus
     extends $Notifier<RoutedProbeState<ServiceTarget, ServiceCheck>> {
@@ -72,6 +72,88 @@ abstract class _$ServiceStatus
                 RoutedProbeState<ServiceTarget, ServiceCheck>
               >,
               RoutedProbeState<ServiceTarget, ServiceCheck>,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
+/// The delay each service answered with, most recent last, so the card can
+/// draw a line instead of a bare number. A -1 stands for a probe that came
+/// back without a delay — the line breaks there rather than claiming a zero.
+
+@ProviderFor(ServiceLatencyHistory)
+final serviceLatencyHistoryProvider = ServiceLatencyHistoryProvider._();
+
+/// The delay each service answered with, most recent last, so the card can
+/// draw a line instead of a bare number. A -1 stands for a probe that came
+/// back without a delay — the line breaks there rather than claiming a zero.
+final class ServiceLatencyHistoryProvider
+    extends
+        $NotifierProvider<
+          ServiceLatencyHistory,
+          Map<ServiceTarget, List<double>>
+        > {
+  /// The delay each service answered with, most recent last, so the card can
+  /// draw a line instead of a bare number. A -1 stands for a probe that came
+  /// back without a delay — the line breaks there rather than claiming a zero.
+  ServiceLatencyHistoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'serviceLatencyHistoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$serviceLatencyHistoryHash();
+
+  @$internal
+  @override
+  ServiceLatencyHistory create() => ServiceLatencyHistory();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Map<ServiceTarget, List<double>> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Map<ServiceTarget, List<double>>>(
+        value,
+      ),
+    );
+  }
+}
+
+String _$serviceLatencyHistoryHash() =>
+    r'b413301b3e09eeeffb338ce8f5842666d66bf990';
+
+/// The delay each service answered with, most recent last, so the card can
+/// draw a line instead of a bare number. A -1 stands for a probe that came
+/// back without a delay — the line breaks there rather than claiming a zero.
+
+abstract class _$ServiceLatencyHistory
+    extends $Notifier<Map<ServiceTarget, List<double>>> {
+  Map<ServiceTarget, List<double>> build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref =
+        this.ref
+            as $Ref<
+              Map<ServiceTarget, List<double>>,
+              Map<ServiceTarget, List<double>>
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                Map<ServiceTarget, List<double>>,
+                Map<ServiceTarget, List<double>>
+              >,
+              Map<ServiceTarget, List<double>>,
               Object?,
               Object?
             >;

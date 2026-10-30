@@ -209,7 +209,7 @@
   "pureBlackMode": "Чисто чёрный режим",
   "sidebar": "Боковая панель",
   "backgroundBlur": "Размытие фона",
-  "sidebarBlurDesc": "Размытие фона показывает рабочий стол за окном сквозь боковую панель.",
+  "sidebarBlurDesc": "Размытие фона показывает рабочий стол за окном сквозь весь интерфейс, как матовое стекло.",
   "liquidGlass": "Жидкое стекло",
   "keepAliveIntervalDesc": "Интервал TCP keep-alive",
   "entries": " записей",
@@ -556,6 +556,7 @@
   "vpnConfigChangeDetected": "Обнаружено изменение настроек VPN",
   "restart": "Перезапустить",
   "speedStatistics": "Статистика скорости",
+  "speed": "Скорость",
   "resetPageChangesTip": "На этой странице есть изменения. Вы уверены, что хотите выполнить сброс?",
   "customProfile": "Пользовательский",
   "customProfileResources": "Ресурсы пользовательских профилей",
@@ -963,5 +964,13 @@
   "preferred": "Предпочтительный",
   "addToLocalProxies": "Добавить в локальные прокси",
   "addedToLocalProxies": "«{name}» добавлен в локальные прокси",
-  "alreadyInLocalProxies": "«{name}» уже есть в локальных прокси"
+  "alreadyInLocalProxies": "«{name}» уже есть в локальных прокси",
+  "nodeHealth": "Состояние узла",
+  "proxy": "Прокси",
+  "reject": "Отклонить",
+  "sessionConnections": "Соединения сеанса",
+  "quickSwitches": "Быстрые переключатели",
+  "activeProcesses": "Активные процессы",
+  "networkEnvironment": "Сеть",
+  "currentNode": "Текущий узел"
 }

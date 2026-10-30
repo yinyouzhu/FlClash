@@ -10,13 +10,15 @@ const routedOutbound = '';
 
 /// [id] must match the checker name registered in core/service_check.go.
 enum ServiceTarget {
-  google('google', 'Google', 'google'),
-  github('github', 'GitHub', 'github'),
+  baidu('baidu', '百度', 'baidu'),
   youtube('youtube', 'YouTube', 'youtube'),
-  chatgpt('chatgpt', 'ChatGPT', 'openai'),
-  claude('claude', 'Claude', 'claude'),
+  google('google', 'Google', 'google'),
+  taobao('taobao', '淘宝', 'taobao'),
+  github('github', 'GitHub', 'github'),
   gemini('gemini', 'Gemini', 'gemini'),
+  chatgpt('chatgpt', 'ChatGPT', 'openai'),
   netflix('netflix', 'Netflix', 'netflix'),
+  claude('claude', 'Claude', 'claude'),
   disneyPlus('disney-plus', 'Disney+', 'disneyplus'),
   primeVideo('prime-video', 'Prime Video', 'primevideo'),
   spotify('spotify', 'Spotify', 'spotify'),
@@ -142,7 +144,7 @@ Future<Map<ServiceTarget, ServiceCheck>> checkServices(
   CoreController core, {
   String proxyName = '',
   List<ServiceTarget> targets = const [],
-  Duration timeout = probeTimeoutDuration,
+  Duration timeout = serviceProbeTimeoutDuration,
 }) async {
   final items = await core.serviceCheck(
     ServiceCheckParams(

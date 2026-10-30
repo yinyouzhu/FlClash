@@ -61,6 +61,11 @@ const delayTimedOutValue = -1;
 
 const probeTimeoutDuration = Duration(seconds: 10);
 
+/// The dashboard's own sweep is a reachability read, not a measurement: a
+/// shorter budget keeps the card from sitting a full ten seconds per service
+/// when a node is down, which is when it matters least.
+const serviceProbeTimeoutDuration = Duration(seconds: 5);
+
 /// Outlasts the Core's one-second pick poll (`routePollInterval` in
 /// core/route.go), so groups re-picking on neighbouring polls cost one route
 /// check.

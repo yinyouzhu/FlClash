@@ -184,6 +184,78 @@ class TotalTraffic extends _$TotalTraffic with AutoDisposeNotifierMixin {
   }
 }
 
+/// What the Core has carried since it started, both ways, and how much of it
+/// went through a proxy.
+///
+/// The Core keeps the two counters apart itself — it adds to the proxy pair
+/// only when the chain's exit is not a direct outbound — so the difference is
+/// the direct half, exactly, instead of an estimate.
+@Riverpod(keepAlive: true)
+class TrafficTotals extends _$TrafficTotals with AutoDisposeNotifierMixin {
+  @override
+  ({Traffic all, Traffic proxy}) build() {
+    return (all: const Traffic(), proxy: const Traffic());
+  }
+}
+
+/// The connections this run has opened, counted as they open.
+///
+/// The Core reports every connection once, when it is set up, so this only
+/// ever grows — the number Loon shows on the same card, and the reason it does
+/// not fall back while traffic is quiet. Only a stop, or a new run, clears it.
+///
+/// The ids are remembered so a connection the Core reports twice (it pushes
+/// the same one again with its final traffic) is not counted twice.
+@Riverpod(keepAlive: true)
+class SessionConnections extends _$SessionConnections
+    with AutoDisposeNotifierMixin {
+  /// Long enough to still recognise a connection whose second report lands
+  /// minutes later, short enough to stay a few megabytes at most.
+  static const _remembered = 20000;
+
+  final _seen = <String>{};
+
+  @override
+  ConnectionSplit build() {
+    return (direct: 0, proxy: 0, reject: 0);
+  }
+
+  void add(TrackerInfo info) {
+    if (!ref.mounted || !_seen.add(info.id)) {
+      return;
+    }
+    if (_seen.length > _remembered) {
+      _seen.remove(_seen.first);
+    }
+    final current = state;
+    value = info.isRejectRoute
+        ? (
+            direct: current.direct,
+            proxy: current.proxy,
+            reject: current.reject + 1,
+          )
+        : info.isDirectRoute
+        ? (
+            direct: current.direct + 1,
+            proxy: current.proxy,
+            reject: current.reject,
+          )
+        : (
+            direct: current.direct,
+            proxy: current.proxy + 1,
+            reject: current.reject,
+          );
+  }
+
+  void reset() {
+    _seen.clear();
+    if (!ref.mounted) {
+      return;
+    }
+    value = (direct: 0, proxy: 0, reject: 0);
+  }
+}
+
 @Riverpod(keepAlive: true)
 class LoadedLocale extends _$LoadedLocale with AutoDisposeNotifierMixin {
   @override

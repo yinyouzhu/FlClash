@@ -19,10 +19,10 @@ it sits on, which `SurfaceScope` passes down the tree.
 
 Light mode alternates gray and paper: a near-white card on a gray page, a gray block in the card. The card is tone 98,
 not pure white, and the page tone 94: pure white beside a tinted gray made the white glare and the gray look soiled. Dark mode only
-lightens, because a darker step inside a lighter surface reads as a hole rather than a layer, and it steps further:
-tones 6, 15, 21, 27 where light steps by 4, as iOS 27 sets its dark grouped card about 2.3 times as far off the page
-as its light one. At Material's dark tones a card stood barely clear of the page, and on pure black hardly at all.
-`inset` is the floor;
+lightens, because a darker step inside a lighter surface reads as a hole rather than a layer, and it takes Loon's
+charcoal whatever the seed: `toLoonSurfaces` measures its window — page tone 15 (`#242222`), card 18 (`#282828`),
+block 22, inset 27 — a flatter scale than the old 6/15/21/27, whose near-black page let the frosted material behind
+the window read through as a different color. `inset` is the floor;
 nothing nests below it, so a design that needs a fifth level needs fewer containers instead.
 
 - A widget never picks its level at the call site. `CommonCard` and the other shared surfaces read
@@ -47,12 +47,18 @@ nothing nests below it, so a design that needs a fifth level needs fewer contain
   A shadow is black at an opacity, so one measured on iOS darkens FlClash's surfaces as it darkens iOS's own: the
   surfaces differ from iOS's too little to call for retuning, and over the dark page, which is not black, a shadow
   shows where iOS's would not.
+- The window itself is the bottom of the scale. With background blur on (the default on the desktop), the native side
+  draws a vibrancy material behind the whole window and the theme keeps the page level partly clear of it:
+  `watchAppTheme` runs `withGlassPage` at the opacity the port reports, so the scaffold, the floating headers and the
+  sidebar — all painted with the page color — let the material read through as one frosted pane, while cards, blocks
+  and floats stay opaque and keep their steps above it. The sidebar tints nothing extra; the scheme already carries
+  the alpha, so chrome and content composite identically.
 
 ## The Seeded Scheme
 
 `seededColorScheme` in `lib/ui/color.dart` builds every app scheme: Material's scheme for the seed and the
 `ColorStyle` picked in the theme settings, with four groups of roles replaced. Everything else stays Material,
-including `toPureBlack` applied after it.
+including `toLoonSurfaces` applied after it and `toPureBlack` applied last.
 
 The four styles each change something a reader sees at once. Material's nine variants mostly moved secondary and
 tertiary, which the app barely shows, so most of them looked alike once surfaces stayed gray.
@@ -199,3 +205,19 @@ widget test does it: pump `HomePage` or the view inside a `RepaintBoundary`, loa
 gets real glyphs, and write `RenderRepaintBoundary.toImage` to a PNG outside the repository. Look for a surface that
 matches the one it sits on, which means it skipped `SurfaceScope`, and for a tonal container fill that survived on a
 card or row.
+
+## The Window Pane And The One-Layer Rule
+
+macOS draws the frosted pane behind the whole window (`sidebarBlur` in the `plugins/window` package); the page role
+carries its glass alpha (`ColorScheme.withGlassPage`) so the pane shows through it. Loon's shape is one pane for the
+whole window — sidebar and content share it, and the cards float on it:
+
+- `AppSidebarContainer` paints the page once for the entire window and wraps it in `PaneBackdropScope`. The sidebar's
+  `Material` stays clear over it.
+- A page `Scaffold` inside that scope keeps its own background clear (`CommonScaffold`'s main branch); routes pushed
+  above the pane never see the scope and keep painting theirs, as do sheets, which bring their own fill.
+- **A second translucent layer is off the table over the glass.** Measured on the macOS 26 `NSGlassEffectView` pane:
+  one translucent layer (the page's alpha) composites correctly, but any further alpha below full — a card at 0.7 over
+  the page — loses its own color almost entirely on screen, whatever the widget tree does between them. Opaque fills
+  always composite exactly, so the glass-mode card takes an opaque equivalent one level above the page
+  (`DashboardColors` in dark lifts `card` to `block`); the frost lives in the pane, not in the cards.

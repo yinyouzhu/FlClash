@@ -158,6 +158,8 @@ class _Sidebar extends ConsumerWidget {
       appSettingProvider.select((state) => state.sidebarExpanded),
     );
     final version = ref.watch(versionProvider);
+    final connected = ref.watch(isStartProvider);
+    final appLocalizations = context.appLocalizations;
     return NavigationSidebar(
       destinations: [
         for (final item in items)
@@ -166,6 +168,11 @@ class _Sidebar extends ConsumerWidget {
       selectedIndex: currentIndex,
       expanded: canExpand && sidebarExpanded,
       onSelected: onSelected,
+      title: appName,
+      connected: connected,
+      statusLabel: connected
+          ? appLocalizations.connected
+          : appLocalizations.disconnected,
       onToggle: canExpand
           ? () {
               ref
@@ -180,6 +187,7 @@ class _Sidebar extends ConsumerWidget {
         isMacOS: system.isMacOS,
         version: version,
       ),
+      version: globalState.versionLabel,
     );
   }
 }
@@ -220,56 +228,61 @@ class AppSidebarContainer extends ConsumerWidget {
     final navigationItems = navigationState.navigationItems;
     final viewMode = navigationState.viewMode;
     final currentIndex = navigationState.currentIndex;
-    final backdropOpacity = ref.watch(windowBlurProvider);
-    final page = SurfaceLevel.page.colorOf(context.colorScheme);
-    final chrome = context.colorScheme.chromeSurface;
+    final basePage = SurfaceLevel.page.colorOf(context.colorScheme);
+    final glass = ref.watch(glassPaneProvider);
+    // Glass mode paints no page of its own: the whole pane is the native
+    // vibrancy material under one black tint, exactly like Loon's window, so
+    // the desktop's blurred colour reaches every card that is translucent.
+    final page = glass ? Colors.transparent : basePage;
     void onSelected(int index) {
       _handleToPage(ref, navigationItems[index].label);
     }
 
     final hasSidebar = viewMode != ViewMode.mobile;
     final isLtr = Directionality.of(context) == TextDirection.ltr;
-    return Container(
-      color: backdropOpacity != null ? Colors.transparent : page,
-      child: Row(
-        children: [
-          AnimatedVisibility.sidebar(
-            visible: hasSidebar,
-            child: Material(
-              color: backdropOpacity != null
-                  ? chrome.withValues(alpha: backdropOpacity)
-                  : chrome,
-              shape: BorderDirectional(end: Divider.createBorderSide(context)),
-              child: MediaQuery.removePadding(
-                context: context,
-                removeLeft: !isLtr,
-                removeRight: isLtr,
-                child: _Sidebar(
-                  items: navigationItems,
-                  currentIndex: currentIndex,
-                  viewMode: viewMode,
-                  onSelected: onSelected,
+    // The whole window shares one page layer: the sidebar is clear over it,
+    // so the pane reads as a single frosted surface with the cards floating
+    // on it, never two panes meeting at the sidebar's edge.
+    return PaneBackdropScope(
+      child: Container(
+        color: page,
+        child: Row(
+          children: [
+            AnimatedVisibility.sidebar(
+              visible: hasSidebar,
+              child: Material(
+                color: Colors.transparent,
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeLeft: !isLtr,
+                  removeRight: isLtr,
+                  child: _Sidebar(
+                    items: navigationItems,
+                    currentIndex: currentIndex,
+                    viewMode: viewMode,
+                    onSelected: onSelected,
+                  ),
                 ),
               ),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: ClipRect(
-              child: LayoutBuilder(
-                builder: (_, constraints) {
-                  _updateSideBarWidth(ref, constraints.maxWidth);
-                  return MediaQuery.removePadding(
-                    context: context,
-                    removeLeft: hasSidebar && isLtr,
-                    removeRight: hasSidebar && !isLtr,
-                    child: child,
-                  );
-                },
+            Expanded(
+              flex: 1,
+              child: ClipRect(
+                child: LayoutBuilder(
+                  builder: (_, constraints) {
+                    _updateSideBarWidth(ref, constraints.maxWidth);
+                    return MediaQuery.removePadding(
+                      context: context,
+                      removeLeft: hasSidebar && isLtr,
+                      removeRight: hasSidebar && !isLtr,
+                      child: child,
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1641,10 +1641,10 @@ class AppLocalizations {
     );
   }
 
-  /// `Background blur lets the desktop behind the window show through the sidebar.`
+  /// `Background blur lets the desktop behind the window show through the whole interface as a frosted glass layer.`
   String get sidebarBlurDesc {
     return Intl.message(
-      'Background blur lets the desktop behind the window show through the sidebar.',
+      'Background blur lets the desktop behind the window show through the whole interface as a frosted glass layer.',
       name: 'sidebarBlurDesc',
       desc: '',
       args: [],
@@ -4509,6 +4509,11 @@ class AppLocalizations {
       desc: '',
       args: [],
     );
+  }
+
+  /// `Speed`
+  String get speed {
+    return Intl.message('Speed', name: 'speed', desc: '', args: []);
   }
 
   /// `This page has changes. Are you sure you want to reset?`
@@ -8050,6 +8055,71 @@ class AppLocalizations {
       name: 'alreadyInLocalProxies',
       desc: '',
       args: [name],
+    );
+  }
+
+  /// `Node health`
+  String get nodeHealth {
+    return Intl.message('Node health', name: 'nodeHealth', desc: '', args: []);
+  }
+
+  /// `Proxy`
+  String get proxy {
+    return Intl.message('Proxy', name: 'proxy', desc: '', args: []);
+  }
+
+  /// `Reject`
+  String get reject {
+    return Intl.message('Reject', name: 'reject', desc: '', args: []);
+  }
+
+  /// `Session connections`
+  String get sessionConnections {
+    return Intl.message(
+      'Session connections',
+      name: 'sessionConnections',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quick switches`
+  String get quickSwitches {
+    return Intl.message(
+      'Quick switches',
+      name: 'quickSwitches',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active processes`
+  String get activeProcesses {
+    return Intl.message(
+      'Active processes',
+      name: 'activeProcesses',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Network environment`
+  String get networkEnvironment {
+    return Intl.message(
+      'Network environment',
+      name: 'networkEnvironment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current node`
+  String get currentNode {
+    return Intl.message(
+      'Current node',
+      name: 'currentNode',
+      desc: '',
+      args: [],
     );
   }
 }

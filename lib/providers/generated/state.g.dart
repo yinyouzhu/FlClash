@@ -138,7 +138,7 @@ final class SetupPatchProvider
   }
 }
 
-String _$setupPatchHash() => r'283e94846903bafab1c22985b6f90d4c0e2a4697';
+String _$setupPatchHash() => r'd09fb41d40ced4cd47c9131fe55e983e35128724';
 
 @ProviderFor(trayState)
 final trayStateProvider = TrayStateProvider._();
@@ -763,6 +763,75 @@ final class GenColorSchemeFamily extends $Family
   String toString() => r'genColorSchemeProvider';
 }
 
+/// Whether the window is a frosted pane rather than a solid one.
+///
+/// On macOS it always is. The vibrancy material under Loon's black tint *is*
+/// the look this app is chasing, and leaving it to a stored preference meant any
+/// install whose config predates the flag — the generated decoder defaulted the
+/// missing key to `false` — came up as opaque charcoal, reading to the user as
+/// "the frost disappeared again" with no switch visibly off anywhere. A toggle
+/// that can silently flatten the whole window has no value on this platform, so
+/// macOS ignores it; Windows and Linux keep it, where the material is optional.
+
+@ProviderFor(glassPane)
+final glassPaneProvider = GlassPaneProvider._();
+
+/// Whether the window is a frosted pane rather than a solid one.
+///
+/// On macOS it always is. The vibrancy material under Loon's black tint *is*
+/// the look this app is chasing, and leaving it to a stored preference meant any
+/// install whose config predates the flag — the generated decoder defaulted the
+/// missing key to `false` — came up as opaque charcoal, reading to the user as
+/// "the frost disappeared again" with no switch visibly off anywhere. A toggle
+/// that can silently flatten the whole window has no value on this platform, so
+/// macOS ignores it; Windows and Linux keep it, where the material is optional.
+
+final class GlassPaneProvider extends $FunctionalProvider<bool, bool, bool>
+    with $Provider<bool> {
+  /// Whether the window is a frosted pane rather than a solid one.
+  ///
+  /// On macOS it always is. The vibrancy material under Loon's black tint *is*
+  /// the look this app is chasing, and leaving it to a stored preference meant any
+  /// install whose config predates the flag — the generated decoder defaulted the
+  /// missing key to `false` — came up as opaque charcoal, reading to the user as
+  /// "the frost disappeared again" with no switch visibly off anywhere. A toggle
+  /// that can silently flatten the whole window has no value on this platform, so
+  /// macOS ignores it; Windows and Linux keep it, where the material is optional.
+  GlassPaneProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'glassPaneProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$glassPaneHash();
+
+  @$internal
+  @override
+  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  bool create(Ref ref) {
+    return glassPane(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+}
+
+String _$glassPaneHash() => r'e70e9f898fa02e219ba62b8217cc0984e4fe134d';
+
 @ProviderFor(windowBlurRequest)
 final windowBlurRequestProvider = WindowBlurRequestProvider._();
 
@@ -808,7 +877,7 @@ final class WindowBlurRequestProvider
   }
 }
 
-String _$windowBlurRequestHash() => r'90b7a731689db7fa39d979866c428843b1073cf8';
+String _$windowBlurRequestHash() => r'26bbba0c6bf859313099aa55a681dfca6d22730a';
 
 @ProviderFor(currentBrightness)
 final currentBrightnessProvider = CurrentBrightnessProvider._();

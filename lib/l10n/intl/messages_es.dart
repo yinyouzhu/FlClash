@@ -271,6 +271,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Actualizar perfiles",
     ),
     "actionView": MessageLookupByLibrary.simpleMessage("Mostrar/Ocultar"),
+    "activeProcesses": MessageLookupByLibrary.simpleMessage("Procesos activos"),
     "add": MessageLookupByLibrary.simpleMessage("Añadir"),
     "addCustomProxy": MessageLookupByLibrary.simpleMessage("Añadir proxy"),
     "addFilters": MessageLookupByLibrary.simpleMessage("Añadir filtros"),
@@ -579,6 +580,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "create": MessageLookupByLibrary.simpleMessage("Crear"),
     "createProfileFromUrlTip": m7,
     "creationTime": MessageLookupByLibrary.simpleMessage("Fecha de creación"),
+    "currentNode": MessageLookupByLibrary.simpleMessage("Nodo actual"),
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "Contiene el botón de inicio y no se puede quitar",
     ),
@@ -1285,6 +1287,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "networkConnectionError": MessageLookupByLibrary.simpleMessage(
       "No se pudo conectar con el servidor. Comprueba tu conexión de red o los ajustes del proxy",
     ),
+    "networkEnvironment": MessageLookupByLibrary.simpleMessage("Red"),
     "networkHostLookupError": MessageLookupByLibrary.simpleMessage(
       "No se pudo resolver la dirección del servidor. Comprueba que la URL sea correcta y que el DNS funcione",
     ),
@@ -1323,6 +1326,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noSearchResults": MessageLookupByLibrary.simpleMessage(
       "No hay resultados",
     ),
+    "nodeHealth": MessageLookupByLibrary.simpleMessage("Estado del nodo"),
     "nodes": MessageLookupByLibrary.simpleMessage("Nodos"),
     "nonTextProviderFile": MessageLookupByLibrary.simpleMessage(
       "Este recurso externo no es un archivo de texto",
@@ -1479,6 +1483,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "proxiesProfileLabel": m67,
     "proxiesRemovedTip": m68,
     "proxiesReplacedTip": m69,
+    "proxy": MessageLookupByLibrary.simpleMessage("Proxy"),
     "proxyChains": MessageLookupByLibrary.simpleMessage("Cadena de proxies"),
     "proxyGroup": MessageLookupByLibrary.simpleMessage("Grupo de proxies"),
     "proxyGroupEmpty": MessageLookupByLibrary.simpleMessage(
@@ -1506,6 +1511,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "quickActions": MessageLookupByLibrary.simpleMessage("Acciones rápidas"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("Edición rápida"),
+    "quickSwitches": MessageLookupByLibrary.simpleMessage(
+      "Interruptores rápidos",
+    ),
     "recentRequests": MessageLookupByLibrary.simpleMessage(
       "Solicitudes recientes",
     ),
@@ -1514,6 +1522,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "redirPort": MessageLookupByLibrary.simpleMessage("Puerto Redir"),
     "redo": MessageLookupByLibrary.simpleMessage("Rehacer"),
     "regex": MessageLookupByLibrary.simpleMessage("Expresión regular"),
+    "reject": MessageLookupByLibrary.simpleMessage("Rechazar"),
     "releaseMemory": MessageLookupByLibrary.simpleMessage("Liberar memoria"),
     "releaseMemoryFailed": MessageLookupByLibrary.simpleMessage(
       "No se pudo liberar la memoria",
@@ -1832,6 +1841,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "serviceUnsupportedRegion": MessageLookupByLibrary.simpleMessage(
       "Región no compatible",
     ),
+    "sessionConnections": MessageLookupByLibrary.simpleMessage(
+      "Conexiones de la sesión",
+    ),
     "settingEntries": MessageLookupByLibrary.simpleMessage("ajustes"),
     "settings": MessageLookupByLibrary.simpleMessage("Ajustes"),
     "settingsCount": m77,
@@ -1851,7 +1863,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "showPassword": MessageLookupByLibrary.simpleMessage("Mostrar contraseña"),
     "sidebar": MessageLookupByLibrary.simpleMessage("Barra lateral"),
     "sidebarBlurDesc": MessageLookupByLibrary.simpleMessage(
-      "El desenfoque de fondo deja ver el escritorio detrás de la ventana a través de la barra lateral.",
+      "El desenfoque de fondo deja ver el escritorio detrás de la ventana a través de toda la interfaz, como un vidrio esmerilado.",
     ),
     "silentLaunch": MessageLookupByLibrary.simpleMessage("Inicio silencioso"),
     "silentLaunchDesc": MessageLookupByLibrary.simpleMessage(
@@ -1892,6 +1904,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "specialProxy": MessageLookupByLibrary.simpleMessage("Proxy especial"),
     "specialRules": MessageLookupByLibrary.simpleMessage("Reglas especiales"),
     "spectrum": MessageLookupByLibrary.simpleMessage("Espectro"),
+    "speed": MessageLookupByLibrary.simpleMessage("Velocidad"),
     "speedStatistics": MessageLookupByLibrary.simpleMessage(
       "Estadísticas de velocidad",
     ),

@@ -10,11 +10,18 @@ import (
 )
 
 const (
-	// A sweep runs a few checks at a time so it cannot take every probe slot.
-	// It therefore runs in waves, and a rule like Disney+ spends several
-	// requests in sequence, so the run gets a multiple of the request budget.
-	serviceCheckConcurrency  = 4
+	// The eight the card shows are asked at once: a sweep that queued behind
+	// itself took twice as long as the slowest service, which is the wait the
+	// card was showing. A rule like Disney+ still spends several requests in
+	// sequence, so the run gets a multiple of the request budget.
+	serviceCheckConcurrency  = 8
 	serviceSweepBudgetFactor = 6
+
+	// One rule may spend at most this many request budgets before it is cut
+	// off. A rule that reads three endpoints in a row — ChatGPT reads three —
+	// would otherwise hold its slot for the whole sweep when nothing answers,
+	// and the card spinning on it for a minute is what that looks like.
+	serviceCheckAttempts = 2
 
 	// Region markers sit deep inside these pages; endpoints that answer with a
 	// few lines get the small cap.
@@ -100,13 +107,15 @@ type serviceChecker struct {
 }
 
 var serviceCheckers = []serviceChecker{
-	{name: "google", check: checkReachable("https://www.google.com/generate_204")},
-	{name: "github", check: checkReachable("https://github.com/")},
+	{name: "baidu", check: checkReachable("https://www.baidu.com/")},
 	{name: "youtube", check: checkYouTubePremium},
-	{name: "chatgpt", check: checkChatGpt},
-	{name: "claude", check: checkClaude},
+	{name: "google", check: checkReachable("https://www.google.com/generate_204")},
+	{name: "taobao", check: checkReachable("https://www.taobao.com/")},
+	{name: "github", check: checkReachable("https://github.com/")},
 	{name: "gemini", check: checkGemini},
+	{name: "chatgpt", check: checkChatGpt},
 	{name: "netflix", check: checkNetflix},
+	{name: "claude", check: checkClaude},
 	{name: "disney-plus", check: checkDisneyPlus},
 	{name: "prime-video", check: checkPrimeVideo},
 	{name: "spotify", check: checkSpotify},
@@ -164,9 +173,11 @@ func runServiceCheck(ctx context.Context, checker serviceChecker, proxyName stri
 	if ctx.Err() != nil {
 		return item
 	}
-	env := serviceEnv{ctx: ctx, proxyName: proxyName, timeout: timeout, hits: hits}
+	checkCtx, cancel := context.WithTimeout(ctx, timeout*serviceCheckAttempts)
+	defer cancel()
+	env := serviceEnv{ctx: checkCtx, proxyName: proxyName, timeout: timeout, hits: hits}
 	item = checker.check(env)
-	if item.Status == serviceTimeout && hasBudget(ctx, timeout) {
+	if item.Status == serviceTimeout && hasBudget(checkCtx, timeout) {
 		item = checker.check(env)
 	}
 	return item

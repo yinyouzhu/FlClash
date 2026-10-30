@@ -266,6 +266,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Обновить профили",
     ),
     "actionView": MessageLookupByLibrary.simpleMessage("Показать/Скрыть"),
+    "activeProcesses": MessageLookupByLibrary.simpleMessage(
+      "Активные процессы",
+    ),
     "add": MessageLookupByLibrary.simpleMessage("Добавить"),
     "addCustomProxy": MessageLookupByLibrary.simpleMessage("Добавить прокси"),
     "addFilters": MessageLookupByLibrary.simpleMessage("Добавить фильтры"),
@@ -554,6 +557,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "create": MessageLookupByLibrary.simpleMessage("Создать"),
     "createProfileFromUrlTip": m7,
     "creationTime": MessageLookupByLibrary.simpleMessage("Время создания"),
+    "currentNode": MessageLookupByLibrary.simpleMessage("Текущий узел"),
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "Содержит кнопку запуска, удалить нельзя",
     ),
@@ -1246,6 +1250,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "networkConnectionError": MessageLookupByLibrary.simpleMessage(
       "Не удалось подключиться к серверу. Проверьте подключение к сети или настройки прокси",
     ),
+    "networkEnvironment": MessageLookupByLibrary.simpleMessage("Сеть"),
     "networkHostLookupError": MessageLookupByLibrary.simpleMessage(
       "Не удалось определить адрес сервера. Проверьте правильность URL и работу DNS",
     ),
@@ -1282,6 +1287,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noSearchResults": MessageLookupByLibrary.simpleMessage(
       "Ничего не найдено",
     ),
+    "nodeHealth": MessageLookupByLibrary.simpleMessage("Состояние узла"),
     "nodes": MessageLookupByLibrary.simpleMessage("Узлы"),
     "nonTextProviderFile": MessageLookupByLibrary.simpleMessage(
       "Этот внешний ресурс не является текстовым файлом",
@@ -1432,6 +1438,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "proxiesProfileLabel": m67,
     "proxiesRemovedTip": m68,
     "proxiesReplacedTip": m69,
+    "proxy": MessageLookupByLibrary.simpleMessage("Прокси"),
     "proxyChains": MessageLookupByLibrary.simpleMessage("Цепочка прокси"),
     "proxyGroup": MessageLookupByLibrary.simpleMessage("Группа прокси"),
     "proxyGroupEmpty": MessageLookupByLibrary.simpleMessage(
@@ -1457,12 +1464,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "quickActions": MessageLookupByLibrary.simpleMessage("Быстрые действия"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("Быстрое редактирование"),
+    "quickSwitches": MessageLookupByLibrary.simpleMessage(
+      "Быстрые переключатели",
+    ),
     "recentRequests": MessageLookupByLibrary.simpleMessage("Последние запросы"),
     "recommendedIcons": MessageLookupByLibrary.simpleMessage("Рекомендуемые"),
     "recordType": MessageLookupByLibrary.simpleMessage("Тип записи"),
     "redirPort": MessageLookupByLibrary.simpleMessage("Порт Redir"),
     "redo": MessageLookupByLibrary.simpleMessage("Повторить"),
     "regex": MessageLookupByLibrary.simpleMessage("Регулярное выражение"),
+    "reject": MessageLookupByLibrary.simpleMessage("Отклонить"),
     "releaseMemory": MessageLookupByLibrary.simpleMessage("Освободить память"),
     "releaseMemoryFailed": MessageLookupByLibrary.simpleMessage(
       "Не удалось освободить память",
@@ -1773,6 +1784,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "serviceUnsupportedRegion": MessageLookupByLibrary.simpleMessage(
       "Регион не поддерживается",
     ),
+    "sessionConnections": MessageLookupByLibrary.simpleMessage(
+      "Соединения сеанса",
+    ),
     "settingEntries": MessageLookupByLibrary.simpleMessage("параметры"),
     "settings": MessageLookupByLibrary.simpleMessage("Настройки"),
     "settingsCount": m77,
@@ -1792,7 +1806,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "showPassword": MessageLookupByLibrary.simpleMessage("Показать пароль"),
     "sidebar": MessageLookupByLibrary.simpleMessage("Боковая панель"),
     "sidebarBlurDesc": MessageLookupByLibrary.simpleMessage(
-      "Размытие фона показывает рабочий стол за окном сквозь боковую панель.",
+      "Размытие фона показывает рабочий стол за окном сквозь весь интерфейс, как матовое стекло.",
     ),
     "silentLaunch": MessageLookupByLibrary.simpleMessage("Тихий запуск"),
     "silentLaunchDesc": MessageLookupByLibrary.simpleMessage(
@@ -1833,6 +1847,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "specialProxy": MessageLookupByLibrary.simpleMessage("Специальный прокси"),
     "specialRules": MessageLookupByLibrary.simpleMessage("Специальные правила"),
     "spectrum": MessageLookupByLibrary.simpleMessage("Спектр"),
+    "speed": MessageLookupByLibrary.simpleMessage("Скорость"),
     "speedStatistics": MessageLookupByLibrary.simpleMessage(
       "Статистика скорости",
     ),

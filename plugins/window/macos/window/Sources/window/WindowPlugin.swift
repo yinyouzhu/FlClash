@@ -53,6 +53,11 @@ public class WindowPlugin: NSObject, FlutterPlugin {
         }
         WindowPlugin.instance = plugin
         registrar.addMethodCallDelegate(plugin, channel: channel)
+        // The per-card vibrancy platform view was abandoned: a real `NSView`
+        // embedded through a platform view swallows every click in the card, and
+        // registering the factory also pushes the engine into its platform-view
+        // composition path. Nothing on the Dart side creates this view any more,
+        // so the factory is deliberately not registered.
     }
 
     public override init() {
@@ -175,7 +180,13 @@ public class WindowPlugin: NSObject, FlutterPlugin {
                 }
                 let tint = try args.optionalInt("tint")
                 let appearance = try WindowEffectView.appearance(brightness: try args.optionalString("brightness"))
-                try controller.setEffect(effect, tint: tint.map { NSColor(argb: $0) }, appearance: appearance)
+                let opacity = try args.optionalDouble("opacity")
+                try controller.setEffect(
+                    effect,
+                    tint: tint.map { NSColor(argb: $0) },
+                    appearance: appearance,
+                    opacity: opacity
+                )
                 return nil
             },
             "startDragging": { _ in try controller.startDragging(); return nil }

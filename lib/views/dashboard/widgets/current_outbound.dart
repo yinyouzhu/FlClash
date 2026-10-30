@@ -391,7 +391,8 @@ class _IpText extends ConsumerWidget {
   }
 }
 
-double _chipHeight(bool large) => large ? 28 : 24;
+double _chipHeight(bool large) =>
+    large ? DashboardChip.largeHeight : DashboardChip.height;
 
 const _chipSkeletonWidths = [48.0, 72.0];
 

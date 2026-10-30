@@ -210,15 +210,21 @@ class DesktopWindow {
   }
 
   /// [brightness] picks the light or dark material; null follows the system.
+  ///
+  /// [opacity] composites the frost itself at less than full strength, letting
+  /// the raw desktop through underneath. The system materials bottom out at a
+  /// fixed density — this is the only way to go lighter than that.
   Future<void> setEffect(
     WindowEffect effect, {
     Color? tint,
     Brightness? brightness,
+    double? opacity,
   }) {
     return _call('setEffect', {
       'effect': effect.name,
       'tint': tint?.toARGB32(),
       'brightness': brightness?.name,
+      'opacity': opacity,
     });
   }
 

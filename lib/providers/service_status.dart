@@ -33,6 +33,11 @@ class ServiceStatus extends _$ServiceStatus
       targets: [target],
     );
     final check = checks[target];
+    if (check != null) {
+      ref
+          .read(serviceLatencyHistoryProvider.notifier)
+          .record(target, check);
+    }
     return {
       if (check != null)
         target: ProbeAnswer(
@@ -42,6 +47,39 @@ class ServiceStatus extends _$ServiceStatus
           hits: check.hits,
         ),
     };
+  }
+}
+
+/// How many probes a service's sparkline keeps. Loon's own card draws about
+/// that many points across its width, which is the number to match.
+const serviceLatencySamples = 18;
+
+/// The delay each service answered with, most recent last, so the card can
+/// draw a line instead of a bare number. A -1 stands for a probe that came
+/// back without a delay — the line breaks there rather than claiming a zero.
+@Riverpod(keepAlive: true)
+class ServiceLatencyHistory extends _$ServiceLatencyHistory {
+  @override
+  Map<ServiceTarget, List<double>> build() => const {};
+
+  void record(ServiceTarget target, ServiceCheck check) {
+    final delay = check.status == ServiceProbeStatus.available
+        ? (check.delay?.toDouble() ?? -1)
+        : -1.0;
+    final previous = state[target] ?? const <double>[];
+    final next = [...previous, delay];
+    state = {
+      ...state,
+      target: next.length > serviceLatencySamples
+          ? next.sublist(next.length - serviceLatencySamples)
+          : next,
+    };
+  }
+
+  void clear() {
+    if (state.isNotEmpty) {
+      state = const {};
+    }
   }
 }
 

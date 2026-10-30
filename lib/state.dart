@@ -16,7 +16,17 @@ class GlobalState {
   static GlobalState? _instance;
   GlobalKey<NavigatorState> get navigatorKey => rootNavigatorKey;
   late String appEnv;
-  late PackageInfo packageInfo;
+  PackageInfo? _packageInfo;
+
+  PackageInfo get packageInfo => _packageInfo!;
+
+  set packageInfo(PackageInfo value) => _packageInfo = value;
+
+  /// The display version ("v1.2.3"), or null where the app has not bootstrapped
+  /// yet — widget tests build the shell without platform package info.
+  String? get versionLabel =>
+      _packageInfo == null ? null : 'v${_packageInfo!.version}';
+
   late Measure measure;
   late ProviderContainer container;
   bool needInitStatus = true;

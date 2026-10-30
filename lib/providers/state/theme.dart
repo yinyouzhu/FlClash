@@ -85,7 +85,7 @@ ColorScheme _cachedColorScheme(
         seedColor: seedColor,
         brightness: brightness,
         style: style,
-      ).toPureBlack(pureBlack);
+      ).toLoonSurfaces().toPureBlack(pureBlack);
   _colorSchemes[key] = colorScheme;
   if (_colorSchemes.length > _maxCachedColorSchemes) {
     _colorSchemes.remove(_colorSchemes.keys.first);
@@ -93,13 +93,28 @@ ColorScheme _cachedColorScheme(
   return colorScheme;
 }
 
+/// Whether the window is a frosted pane rather than a solid one.
+///
+/// On macOS it always is. The vibrancy material under Loon's black tint *is*
+/// the look this app is chasing, and leaving it to a stored preference meant any
+/// install whose config predates the flag — the generated decoder defaulted the
+/// missing key to `false` — came up as opaque charcoal, reading to the user as
+/// "the frost disappeared again" with no switch visibly off anywhere. A toggle
+/// that can silently flatten the whole window has no value on this platform, so
+/// macOS ignores it; Windows and Linux keep it, where the material is optional.
+@riverpod
+bool glassPane(Ref ref) {
+  if (system.isMacOS) {
+    return true;
+  }
+  return ref.watch(themeSettingProvider.select((state) => state.sidebarBlur));
+}
+
 typedef WindowBlurRequest = ({bool enabled, Brightness brightness, Color tint});
 
 @riverpod
 WindowBlurRequest windowBlurRequest(Ref ref) {
-  final enabled = ref.watch(
-    themeSettingProvider.select((state) => state.sidebarBlur),
-  );
+  final enabled = ref.watch(glassPaneProvider);
   final brightness = ref.watch(currentBrightnessProvider);
   final colorScheme = ref.watch(genColorSchemeProvider(brightness));
   return (

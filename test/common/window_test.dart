@@ -101,7 +101,7 @@ void main() {
     );
 
     expect(first, isNull);
-    expect(second, 0.5);
+    expect(second, 0.75);
     expect(
       methodCalls.where((call) => call.method == 'isEffectSupported'),
       hasLength(Platform.isWindows ? 4 : 3),
@@ -123,12 +123,12 @@ void main() {
       return;
     }
 
-    expect(active, 0.5);
+    expect(active, 0.75);
     expect(calls.last, 'setEffect');
     expect(methodCalls.last.arguments, {
       'effect': Platform.isWindows ? 'mica' : 'glass',
       'tint': Platform.isWindows
-          ? tint.withValues(alpha: 0.5).toARGB32()
+          ? tint.withValues(alpha: 0.75).toARGB32()
           : null,
       'brightness': 'dark',
     });
@@ -151,7 +151,7 @@ void main() {
     expect(methodCalls.last.arguments, {
       'effect': 'none',
       'tint': Platform.isWindows
-          ? tint.withValues(alpha: 0.5).toARGB32()
+          ? tint.withValues(alpha: 0.75).toARGB32()
           : null,
       'brightness': 'light',
     });

@@ -75,9 +75,11 @@ void main() {
   testWidgets('the desktop grid bounces when it fits the window', (
     tester,
   ) async {
+    // Tall enough for the whole home grid, so there is nothing to scroll and
+    // the pull finds the bounce instead.
     final position = await pumpDashboard(
       tester,
-      const Size(1220, 900),
+      const Size(1220, 1200),
       SupportPlatform.MacOS,
     );
     expect(position.maxScrollExtent, 0);

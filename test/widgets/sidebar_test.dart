@@ -37,8 +37,10 @@ Widget _sidebar({
   VoidCallback? onToggle,
   Size windowControls = Size.zero,
   EdgeInsets safePadding = EdgeInsets.zero,
+  String? version,
 }) {
   return TestApp(
+    wrapInProviderScope: true,
     child: Scaffold(
       body: Row(
         children: [
@@ -54,6 +56,9 @@ Widget _sidebar({
                   onSelected: onSelected ?? (_) {},
                   onToggle: onToggle,
                   windowControls: windowControls,
+                  title: 'FlClash',
+                  statusLabel: 'Disconnected',
+                  version: version,
                 ),
               ),
             ),
@@ -66,16 +71,6 @@ Widget _sidebar({
 }
 
 Finder get _sidebarFinder => find.byType(NavigationSidebar);
-
-Finder _indicator(WidgetTester tester) {
-  final primary = Theme.of(tester.element(_sidebarFinder)).colorScheme.primary;
-  return find.byWidgetPredicate(
-    (widget) =>
-        widget is DecoratedBox &&
-        widget.decoration is ShapeDecoration &&
-        (widget.decoration as ShapeDecoration).color == primary,
-  );
-}
 
 Finder _labels(String label) => find.ancestor(
   of: find.text(label),
@@ -103,17 +98,25 @@ Finder _rowTooltip(String message) => find.byWidgetPredicate(
 );
 
 void main() {
-  testWidgets('the selected row carries a centered indicator', (tester) async {
+  testWidgets('the selected row carries an accent fill and label', (
+    tester,
+  ) async {
     await tester.pumpWidget(_sidebar(selectedIndex: 1));
 
-    final indicator = tester.getRect(_indicator(tester));
-    expect(indicator.width, 3);
-    expect(indicator.height, 16);
-    expect(
-      indicator.center.dy,
-      moreOrLessEquals(tester.getCenter(_glyph(AppGlyphs.proxies)).dy),
+    final primary = Theme.of(
+      tester.element(_sidebarFinder),
+    ).colorScheme.primary;
+    final row = tester.widget<Material>(
+      find
+          .ancestor(
+            of: _glyph(AppGlyphs.proxies),
+            matching: find.byType(Material),
+          )
+          .first,
     );
-    expect(tester.getSize(_sidebarFinder).width, 220);
+    expect(row.color, primary.withValues(alpha: 0.12));
+    expect(tester.widget<Text>(find.text('Proxies')).style?.color, primary);
+    expect(tester.getSize(_sidebarFinder).width, 158);
     expect(_labelOpacities(tester, 'Proxies'), [1]);
     expect(
       tester.getSemantics(find.text('Proxies')),
@@ -121,25 +124,25 @@ void main() {
     );
   });
 
-  testWidgets('the indicator stretches toward the new row and settles on it', (
+  testWidgets('the brand block pairs the mark with the app name and version', (
     tester,
   ) async {
-    await tester.pumpWidget(_sidebar());
-    final start = tester.getRect(_indicator(tester));
+    await tester.pumpWidget(_sidebar(version: 'v1.2.3'));
 
-    await tester.pumpWidget(_sidebar(selectedIndex: 2));
-    await tester.pump(const Duration(milliseconds: 160));
-    final middle = tester.getRect(_indicator(tester));
-    expect(middle.top, greaterThanOrEqualTo(start.top));
-    expect(middle.height, greaterThan(16));
+    expect(find.text('FlClash'), findsOneWidget);
+    expect(find.text('Disconnected'), findsOneWidget);
+    expect(find.text('v1.2.3'), findsOneWidget);
 
-    await tester.pumpAndSettle();
-    final end = tester.getRect(_indicator(tester));
-    expect(end.height, 16);
-    expect(
-      end.center.dy,
-      moreOrLessEquals(tester.getCenter(_glyph(AppGlyphs.profiles)).dy),
+    final logo = tester.getRect(
+      find.descendant(of: _sidebarFinder, matching: find.byType(Image)),
     );
+    expect(logo.size, const Size(28, 28));
+    expect(logo.left, 18);
+
+    await tester.pumpWidget(_sidebar(expanded: false, version: 'v1.2.3'));
+    await tester.pumpAndSettle();
+    expect(tester.getCenter(find.byType(Image)).dx, 24);
+    expect(_labelOpacities(tester, 'FlClash'), [0]);
   });
 
   testWidgets('only the selected row fills its icon', (tester) async {
@@ -180,12 +183,11 @@ void main() {
     await tester.pumpWidget(_sidebar(onToggle: () {}));
     await tester.pump(const Duration(milliseconds: 120));
     final width = tester.getSize(_sidebarFinder).width;
-    expect(width, allOf(greaterThan(48), lessThan(220)));
+    expect(width, allOf(greaterThan(48), lessThan(158)));
     expect(tester.takeException(), isNull);
 
     await tester.pumpAndSettle();
-    expect(tester.getSize(_sidebarFinder).width, 220);
-    expect(_rowTooltip('Proxies'), findsNothing);
+    expect(tester.getSize(_sidebarFinder).width, 158);
     expect(find.byTooltip('Collapse'), findsOneWidget);
   });
 
@@ -197,6 +199,7 @@ void main() {
       _sidebar(
         destinations: const [
           ..._destinations,
+          SidebarDestination(glyph: AppGlyphs.dns, label: 'DNS'),
           SidebarDestination(glyph: AppGlyphs.connections, label: long),
         ],
         onToggle: () {},
@@ -204,7 +207,7 @@ void main() {
     );
 
     expect(_rowTooltip(long), findsOneWidget);
-    expect(_rowTooltip('Proxies'), findsNothing);
+    expect(_rowTooltip('DNS'), findsNothing);
   });
 
   testWidgets('the toggle glyph follows the pane as it widens', (tester) async {
@@ -245,12 +248,12 @@ void main() {
 
     final sidebar = tester.getRect(_sidebarFinder);
     expect(sidebar.width, 78);
-    final toggle = find.byTooltip('Expand');
-    expect(
-      tester.getTopLeft(toggle).dy,
-      greaterThanOrEqualTo(sidebar.top + 32),
+    final logo = tester.getRect(
+      find.descendant(of: _sidebarFinder, matching: find.byType(Image)),
     );
-    expect(tester.getCenter(toggle).dx, sidebar.center.dx);
+    expect(logo.top, greaterThanOrEqualTo(sidebar.top + 32));
+    expect(logo.center.dx, sidebar.center.dx);
+    expect(tester.getCenter(find.byTooltip('Expand')).dx, sidebar.center.dx);
     expect(tester.getCenter(_glyph(AppGlyphs.profiles)).dx, sidebar.center.dx);
     final selectedItem = tester.getRect(
       find
@@ -268,7 +271,7 @@ void main() {
       _sidebar(onToggle: () {}, windowControls: const Size(78, 32)),
     );
     await tester.pumpAndSettle();
-    expect(tester.getSize(_sidebarFinder).width, 220);
+    expect(tester.getSize(_sidebarFinder).width, 158);
     expect(tester.getCenter(_glyph(AppGlyphs.profiles)), folder);
   });
 
@@ -293,9 +296,11 @@ void main() {
         contentWidth,
       );
       expect(_labelOpacities(tester, 'Proxies'), unorderedEquals([0, 1]));
+      // The pane widens in place, so the toggle keeps its row and only slides
+      // with the row inset.
       expect(
-        tester.getTopLeft(find.byTooltip('Collapse')),
-        tester.getTopLeft(find.byTooltip('Expand')),
+        tester.getCenter(find.byTooltip('Collapse')).dy,
+        tester.getCenter(find.byTooltip('Expand')).dy,
       );
       final colorScheme = Theme.of(tester.element(_sidebarFinder)).colorScheme;
       final pane = tester.widget<Material>(_paneFinder);
@@ -328,8 +333,8 @@ void main() {
       final pane = tester.getRect(_paneFinder);
       expect(pane.topLeft, sidebar.topLeft);
       expect(pane.height, sidebar.height);
-      expect(pane.width, 220 + safePadding.left);
-      expect(tester.getTopLeft(find.byTooltip('Collapse')), toggle);
+      expect(pane.width, 158 + safePadding.left);
+      expect(tester.getTopLeft(find.byTooltip('Collapse')).dy, toggle.dy);
     });
 
     testWidgets('choosing a row selects it and closes the pane', (
@@ -371,7 +376,9 @@ void main() {
         location: tester.getCenter(find.byTooltip('Collapse')),
       );
       await tester.pump(const Duration(seconds: 1));
-      expect(find.text('Collapse'), findsOneWidget);
+      // The row now carries the label itself, and the tooltip floats over the
+      // pane on top of it, so both copies are on screen.
+      expect(find.text('Collapse'), findsNWidgets(2));
     });
 
     testWidgets('widening the window closes the pane', (tester) async {

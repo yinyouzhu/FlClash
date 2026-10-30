@@ -188,11 +188,17 @@ final class WindowController: NSObject, NSWindowDelegate {
         return WindowEffectView.isSupported(effect)
     }
 
-    func setEffect(_ effect: WindowEffect, tint: NSColor?, appearance: NSAppearance?) throws {
+    func setEffect(
+        _ effect: WindowEffect,
+        tint: NSColor?,
+        appearance: NSAppearance?,
+        opacity: Double?
+    ) throws {
         let window = try requireWindow()
         style.effect = effect
         style.effectTint = tint
         style.effectAppearance = appearance
+        style.effectOpacity = opacity.map { CGFloat($0) }
         style.apply(to: window)
     }
 

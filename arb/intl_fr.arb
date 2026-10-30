@@ -209,7 +209,7 @@
   "pureBlackMode": "Mode noir pur",
   "sidebar": "Barre latérale",
   "backgroundBlur": "Flou d’arrière-plan",
-  "sidebarBlurDesc": "Le flou d’arrière-plan laisse voir le bureau derrière la fenêtre à travers la barre latérale.",
+  "sidebarBlurDesc": "Le flou d’arrière-plan laisse voir le bureau derrière la fenêtre à travers toute l’interface, comme un verre dépoli.",
   "liquidGlass": "Liquid Glass",
   "keepAliveIntervalDesc": "Intervalle keep-alive TCP",
   "entries": " entrées",
@@ -556,6 +556,7 @@
   "vpnConfigChangeDetected": "Modification de la configuration liée au VPN détectée",
   "restart": "Redémarrer",
   "speedStatistics": "Statistiques de débit",
+  "speed": "Vitesse",
   "resetPageChangesTip": "Cette page contient des modifications. Voulez-vous vraiment réinitialiser ?",
   "customProfile": "Personnalisé",
   "customProfileResources": "Ressources des profils personnalisés",
@@ -963,5 +964,13 @@
   "preferred": "Préféré",
   "addToLocalProxies": "Ajouter aux proxys locaux",
   "addedToLocalProxies": "{name} ajouté aux proxys locaux",
-  "alreadyInLocalProxies": "{name} est déjà dans les proxys locaux"
+  "alreadyInLocalProxies": "{name} est déjà dans les proxys locaux",
+  "nodeHealth": "État du nœud",
+  "proxy": "Proxy",
+  "reject": "Rejeter",
+  "sessionConnections": "Connexions de la session",
+  "quickSwitches": "Commutateurs rapides",
+  "activeProcesses": "Processus actifs",
+  "networkEnvironment": "Réseau",
+  "currentNode": "Nœud actuel"
 }

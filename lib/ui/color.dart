@@ -303,6 +303,34 @@ extension ColorExtension on Color {
 }
 
 extension ColorSchemeExtension on ColorScheme {
+  /// Loon's charcoal, which the dark chrome takes whatever the seed is: the
+  /// page and the card measured off its window, with the floors between kept
+  /// far enough apart for an elevated sheet to still read as a layer. Applied
+  /// before [toPureBlack], so opting into pure black still bottoms out.
+  ColorScheme toLoonSurfaces() {
+    if (brightness != Brightness.dark) {
+      return this;
+    }
+    return copyWith(
+      surface: const Color(0xFF242222),
+      surfaceDim: const Color(0xFF161515),
+      surfaceBright: const Color(0xFF3E3B3C),
+      surfaceContainerLowest: const Color(0xFF1B1A1A),
+      surfaceContainerLow: const Color(0xFF262425),
+      surfaceContainer: const Color(0xFF282828),
+      surfaceContainerHigh: const Color(0xFF322F30),
+      surfaceContainerHighest: const Color(0xFF3B3839),
+    );
+  }
+
+  /// Leaves [alpha] of the page level to the window material the native side
+  /// draws behind the content, so the whole window reads as one frosted pane
+  /// and the cards above stay opaque. Dark keeps its page on `surface`, light
+  /// on `surfaceContainer`; the alpha rides the same role either way.
+  ColorScheme withGlassPage(double alpha) => brightness == Brightness.dark
+      ? copyWith(surface: surface.withValues(alpha: alpha))
+      : copyWith(surfaceContainer: surfaceContainer.withValues(alpha: alpha));
+
   ColorScheme toPureBlack(bool isPureBlack) {
     if (!isPureBlack || brightness != Brightness.dark) {
       return this;

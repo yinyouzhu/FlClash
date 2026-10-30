@@ -209,7 +209,7 @@
   "pureBlackMode": "퓨어 블랙 모드",
   "sidebar": "사이드바",
   "backgroundBlur": "배경 흐림",
-  "sidebarBlurDesc": "배경 흐림은 창 뒤의 바탕화면을 사이드바에 비쳐 보이게 합니다.",
+  "sidebarBlurDesc": "배경 흐림은 창 뒤의 바탕화면이 인터페이스 전체에 서리 낀 유리처럼 비치게 합니다.",
   "liquidGlass": "Liquid Glass",
   "keepAliveIntervalDesc": "TCP 킵얼라이브 간격",
   "entries": "개 항목",
@@ -556,6 +556,7 @@
   "vpnConfigChangeDetected": "VPN 관련 구성 변경이 감지되었습니다",
   "restart": "다시 시작",
   "speedStatistics": "속도 통계",
+  "speed": "속도",
   "resetPageChangesTip": "이 페이지에 변경 사항이 있습니다. 초기화하시겠습니까?",
   "customProfile": "사용자 지정",
   "customProfileResources": "사용자 지정 프로필 리소스",
@@ -963,5 +964,13 @@
   "preferred": "우선",
   "addToLocalProxies": "로컬 프록시에 추가",
   "addedToLocalProxies": "{name}을(를) 로컬 프록시에 추가했습니다",
-  "alreadyInLocalProxies": "{name}은(는) 이미 로컬 프록시에 있습니다"
+  "alreadyInLocalProxies": "{name}은(는) 이미 로컬 프록시에 있습니다",
+  "nodeHealth": "노드 상태",
+  "proxy": "프록시",
+  "reject": "거부",
+  "sessionConnections": "이번 연결",
+  "quickSwitches": "빠른 전환",
+  "activeProcesses": "활성 프로세스",
+  "networkEnvironment": "네트워크 환경",
+  "currentNode": "현재 노드"
 }

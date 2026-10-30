@@ -237,6 +237,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionTun": MessageLookupByLibrary.simpleMessage("TUN"),
     "actionUpdateProfiles": MessageLookupByLibrary.simpleMessage("프로필 업데이트"),
     "actionView": MessageLookupByLibrary.simpleMessage("표시/숨기기"),
+    "activeProcesses": MessageLookupByLibrary.simpleMessage("활성 프로세스"),
     "add": MessageLookupByLibrary.simpleMessage("추가"),
     "addCustomProxy": MessageLookupByLibrary.simpleMessage("프록시 추가"),
     "addFilters": MessageLookupByLibrary.simpleMessage("필터 추가"),
@@ -443,6 +444,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "create": MessageLookupByLibrary.simpleMessage("만들기"),
     "createProfileFromUrlTip": m7,
     "creationTime": MessageLookupByLibrary.simpleMessage("생성 시간"),
+    "currentNode": MessageLookupByLibrary.simpleMessage("현재 노드"),
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "시작 버튼이 있어 제거할 수 없습니다",
     ),
@@ -1008,6 +1010,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "networkConnectionError": MessageLookupByLibrary.simpleMessage(
       "서버에 연결할 수 없습니다. 네트워크 연결이나 프록시 설정을 확인하세요",
     ),
+    "networkEnvironment": MessageLookupByLibrary.simpleMessage("네트워크 환경"),
     "networkHostLookupError": MessageLookupByLibrary.simpleMessage(
       "서버 주소를 확인할 수 없습니다. URL이 올바른지, DNS가 정상인지 확인하세요",
     ),
@@ -1038,6 +1041,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noResolve": MessageLookupByLibrary.simpleMessage("IP 확인 안 함"),
     "noResolveHostname": MessageLookupByLibrary.simpleMessage("호스트 이름 확인 안 함"),
     "noSearchResults": MessageLookupByLibrary.simpleMessage("일치하는 결과 없음"),
+    "nodeHealth": MessageLookupByLibrary.simpleMessage("노드 상태"),
     "nodes": MessageLookupByLibrary.simpleMessage("노드"),
     "nonTextProviderFile": MessageLookupByLibrary.simpleMessage(
       "이 외부 리소스는 텍스트 파일이 아닙니다",
@@ -1156,6 +1160,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "proxiesProfileLabel": m67,
     "proxiesRemovedTip": m68,
     "proxiesReplacedTip": m69,
+    "proxy": MessageLookupByLibrary.simpleMessage("프록시"),
     "proxyChains": MessageLookupByLibrary.simpleMessage("프록시 체인"),
     "proxyGroup": MessageLookupByLibrary.simpleMessage("프록시 그룹"),
     "proxyGroupEmpty": MessageLookupByLibrary.simpleMessage("프록시 그룹이 비어 있습니다"),
@@ -1177,12 +1182,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "quickActions": MessageLookupByLibrary.simpleMessage("빠른 작업"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("빠른 편집"),
+    "quickSwitches": MessageLookupByLibrary.simpleMessage("빠른 전환"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("최근 요청"),
     "recommendedIcons": MessageLookupByLibrary.simpleMessage("추천"),
     "recordType": MessageLookupByLibrary.simpleMessage("레코드 유형"),
     "redirPort": MessageLookupByLibrary.simpleMessage("Redir 포트"),
     "redo": MessageLookupByLibrary.simpleMessage("다시 실행"),
     "regex": MessageLookupByLibrary.simpleMessage("정규식"),
+    "reject": MessageLookupByLibrary.simpleMessage("거부"),
     "releaseMemory": MessageLookupByLibrary.simpleMessage("메모리 해제"),
     "releaseMemoryFailed": MessageLookupByLibrary.simpleMessage(
       "메모리를 해제하지 못했습니다",
@@ -1425,6 +1432,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "serviceUnsupportedRegion": MessageLookupByLibrary.simpleMessage(
       "지원하지 않는 지역",
     ),
+    "sessionConnections": MessageLookupByLibrary.simpleMessage("이번 연결"),
     "settingEntries": MessageLookupByLibrary.simpleMessage("설정"),
     "settings": MessageLookupByLibrary.simpleMessage("설정"),
     "settingsCount": m77,
@@ -1444,7 +1452,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "showPassword": MessageLookupByLibrary.simpleMessage("비밀번호 표시"),
     "sidebar": MessageLookupByLibrary.simpleMessage("사이드바"),
     "sidebarBlurDesc": MessageLookupByLibrary.simpleMessage(
-      "배경 흐림은 창 뒤의 바탕화면을 사이드바에 비쳐 보이게 합니다.",
+      "배경 흐림은 창 뒤의 바탕화면이 인터페이스 전체에 서리 낀 유리처럼 비치게 합니다.",
     ),
     "silentLaunch": MessageLookupByLibrary.simpleMessage("백그라운드 실행"),
     "silentLaunchDesc": MessageLookupByLibrary.simpleMessage(
@@ -1479,6 +1487,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "specialProxy": MessageLookupByLibrary.simpleMessage("특수 프록시"),
     "specialRules": MessageLookupByLibrary.simpleMessage("특수 규칙"),
     "spectrum": MessageLookupByLibrary.simpleMessage("스펙트럼"),
+    "speed": MessageLookupByLibrary.simpleMessage("속도"),
     "speedStatistics": MessageLookupByLibrary.simpleMessage("속도 통계"),
     "splitStrategy": MessageLookupByLibrary.simpleMessage("분할 전략"),
     "splitStrategyNotEmpty": MessageLookupByLibrary.simpleMessage(

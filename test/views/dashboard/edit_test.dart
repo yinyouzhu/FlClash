@@ -434,7 +434,8 @@ void main() {
 
     expect(find.byTooltip('Edit dashboard'), findsNothing);
     expect(find.byType(DashboardEditor), findsNothing);
-    expect(find.byType(OutboundModeBar), findsOneWidget);
+    expect(find.byType(HomeHeader), findsOneWidget);
+    expect(find.byType(ServiceStatusCard), findsOneWidget);
 
     await teardown(tester);
   });

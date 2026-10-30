@@ -276,6 +276,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Mettre à jour les profils",
     ),
     "actionView": MessageLookupByLibrary.simpleMessage("Afficher/Masquer"),
+    "activeProcesses": MessageLookupByLibrary.simpleMessage("Processus actifs"),
     "add": MessageLookupByLibrary.simpleMessage("Ajouter"),
     "addCustomProxy": MessageLookupByLibrary.simpleMessage("Ajouter un proxy"),
     "addFilters": MessageLookupByLibrary.simpleMessage("Ajouter des filtres"),
@@ -576,6 +577,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "create": MessageLookupByLibrary.simpleMessage("Créer"),
     "createProfileFromUrlTip": m7,
     "creationTime": MessageLookupByLibrary.simpleMessage("Date de création"),
+    "currentNode": MessageLookupByLibrary.simpleMessage("Nœud actuel"),
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "Contient le bouton de démarrage et ne peut pas être retiré",
     ),
@@ -1282,6 +1284,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "networkConnectionError": MessageLookupByLibrary.simpleMessage(
       "Impossible de se connecter au serveur. Vérifiez votre connexion réseau ou vos réglages de proxy",
     ),
+    "networkEnvironment": MessageLookupByLibrary.simpleMessage("Réseau"),
     "networkHostLookupError": MessageLookupByLibrary.simpleMessage(
       "Impossible de résoudre l’adresse du serveur. Vérifiez que l’URL est correcte et que le DNS fonctionne",
     ),
@@ -1318,6 +1321,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ne pas résoudre le nom d’hôte",
     ),
     "noSearchResults": MessageLookupByLibrary.simpleMessage("Aucun résultat"),
+    "nodeHealth": MessageLookupByLibrary.simpleMessage("État du nœud"),
     "nodes": MessageLookupByLibrary.simpleMessage("Nœuds"),
     "nonTextProviderFile": MessageLookupByLibrary.simpleMessage(
       "Cette ressource externe n’est pas un fichier texte",
@@ -1480,6 +1484,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "proxiesProfileLabel": m67,
     "proxiesRemovedTip": m68,
     "proxiesReplacedTip": m69,
+    "proxy": MessageLookupByLibrary.simpleMessage("Proxy"),
     "proxyChains": MessageLookupByLibrary.simpleMessage("Chaîne de proxys"),
     "proxyGroup": MessageLookupByLibrary.simpleMessage("Groupe de proxys"),
     "proxyGroupEmpty": MessageLookupByLibrary.simpleMessage(
@@ -1507,12 +1512,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "quickActions": MessageLookupByLibrary.simpleMessage("Actions rapides"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("Modification rapide"),
+    "quickSwitches": MessageLookupByLibrary.simpleMessage(
+      "Commutateurs rapides",
+    ),
     "recentRequests": MessageLookupByLibrary.simpleMessage("Requêtes récentes"),
     "recommendedIcons": MessageLookupByLibrary.simpleMessage("Suggestions"),
     "recordType": MessageLookupByLibrary.simpleMessage("Type d’enregistrement"),
     "redirPort": MessageLookupByLibrary.simpleMessage("Port Redir"),
     "redo": MessageLookupByLibrary.simpleMessage("Rétablir"),
     "regex": MessageLookupByLibrary.simpleMessage("Regex"),
+    "reject": MessageLookupByLibrary.simpleMessage("Rejeter"),
     "releaseMemory": MessageLookupByLibrary.simpleMessage("Libérer la mémoire"),
     "releaseMemoryFailed": MessageLookupByLibrary.simpleMessage(
       "Échec de la libération de la mémoire",
@@ -1829,6 +1838,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "serviceUnsupportedRegion": MessageLookupByLibrary.simpleMessage(
       "Région non prise en charge",
     ),
+    "sessionConnections": MessageLookupByLibrary.simpleMessage(
+      "Connexions de la session",
+    ),
     "settingEntries": MessageLookupByLibrary.simpleMessage("réglages"),
     "settings": MessageLookupByLibrary.simpleMessage("Paramètres"),
     "settingsCount": m77,
@@ -1850,7 +1862,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "sidebar": MessageLookupByLibrary.simpleMessage("Barre latérale"),
     "sidebarBlurDesc": MessageLookupByLibrary.simpleMessage(
-      "Le flou d’arrière-plan laisse voir le bureau derrière la fenêtre à travers la barre latérale.",
+      "Le flou d’arrière-plan laisse voir le bureau derrière la fenêtre à travers toute l’interface, comme un verre dépoli.",
     ),
     "silentLaunch": MessageLookupByLibrary.simpleMessage(
       "Lancement silencieux",
@@ -1893,6 +1905,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "specialProxy": MessageLookupByLibrary.simpleMessage("Proxy spécial"),
     "specialRules": MessageLookupByLibrary.simpleMessage("Règles spéciales"),
     "spectrum": MessageLookupByLibrary.simpleMessage("Spectre"),
+    "speed": MessageLookupByLibrary.simpleMessage("Vitesse"),
     "speedStatistics": MessageLookupByLibrary.simpleMessage(
       "Statistiques de débit",
     ),

@@ -11,19 +11,39 @@ import 'package:material_new_shapes/material_new_shapes.dart';
 import 'package:material_ui/material_ui.dart';
 
 EdgeInsets dashboardCardPadding(DashboardDensity density) => switch (density) {
+  // Loon's cards read airy: the content clears the side edges by more than a
+  // row gap. Only the horizontal step is raised — the vertical budget of the
+  // tightest card (流量统计) is already spent, and 24 there overflows it.
   DashboardDensity.standard => const EdgeInsets.symmetric(
-    horizontal: 22,
+    horizontal: 24,
     vertical: 20,
   ),
+  // Loon measures 19 clear on the left and 18.5 on top of its own cards, so
+  // the compact pane — the size its window actually runs at — uses the same.
   DashboardDensity.compact => const EdgeInsets.symmetric(
     horizontal: 20,
-    vertical: 16,
+    vertical: 18,
   ),
   DashboardDensity.mobile => const EdgeInsets.symmetric(
     horizontal: 20,
     vertical: 18,
   ),
 };
+
+/// Padding for the two summary cards, which Loon lays out on a fixed rhythm
+/// rather than centring: 20 pt above the title, 10 pt below the legend, so the
+/// slack of a taller card falls at the bottom instead of being split.
+EdgeInsetsGeometry dashboardSummaryCardPadding(DashboardDensity density) =>
+    switch (density) {
+      DashboardDensity.standard => const EdgeInsetsDirectional.fromSTEB(
+        24,
+        24,
+        24,
+        12,
+      ),
+      DashboardDensity.compact || DashboardDensity.mobile =>
+        const EdgeInsetsDirectional.fromSTEB(20, 20, 20, 10),
+    };
 
 double dashboardCardRadius(DashboardDensity density) => density.isDesktop
     ? DashboardCorner.desktopCard
@@ -56,6 +76,23 @@ class DashboardCard extends StatelessWidget {
       padding: padding ?? dashboardCardPadding(density),
       child: child,
     );
+    // Loon floats a card on nothing but its shadow — no border, no inner
+    // highlight — and keeps that shadow in every appearance and every focus
+    // state. Dropping it over the frost made the card dissolve into the pane
+    // instead of sitting on it.
+    final body = Material(
+      type: MaterialType.transparency,
+      child: onTap == null
+          ? content
+          : FocusRing(
+              shape: shape,
+              child: InkWell(
+                customBorder: shape,
+                onTap: onTap,
+                child: content,
+              ),
+            ),
+    );
     return Semantics(
       container: true,
       label: semanticLabel,
@@ -64,21 +101,9 @@ class DashboardCard extends StatelessWidget {
         decoration: ShapeDecoration(
           color: DashboardColors.of(context).card,
           shape: shape,
-          shadows: DashboardShadows.e1(context),
+          shadows: DashboardShadows.card(context),
         ),
-        child: Material(
-          type: MaterialType.transparency,
-          child: onTap == null
-              ? content
-              : FocusRing(
-                  shape: shape,
-                  child: InkWell(
-                    customBorder: shape,
-                    onTap: onTap,
-                    child: content,
-                  ),
-                ),
-        ),
+        child: body,
       ),
     );
   }
@@ -360,6 +385,8 @@ class DashboardConnectedButton extends StatelessWidget {
     required this.background,
     required this.onTap,
     required this.semanticLabel,
+    this.selectedColor,
+    this.selectedForeground,
     required this.builder,
   });
 
@@ -369,6 +396,10 @@ class DashboardConnectedButton extends StatelessWidget {
   final double outer;
   final double inner;
   final Color background;
+
+  /// What the button fills with once it is on; the app's tint by default.
+  final Color? selectedColor;
+  final Color? selectedForeground;
   final VoidCallback onTap;
   final String semanticLabel;
   final Widget Function(Color foreground) builder;
@@ -379,6 +410,7 @@ class DashboardConnectedButton extends StatelessWidget {
     final startRest = first ? outer : inner;
     final endRest = last ? outer : inner;
     final colorScheme = context.colorScheme;
+    final selectedColor = this.selectedColor ?? colorScheme.primary;
     return Semantics(
       button: true,
       selected: selected,
@@ -405,7 +437,7 @@ class DashboardConnectedButton extends StatelessWidget {
               child: Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
-                  color: Color.lerp(background, colorScheme.primary, amount),
+                  color: Color.lerp(background, selectedColor, amount),
                   shape: shape,
                 ),
                 child: Material(
@@ -422,7 +454,9 @@ class DashboardConnectedButton extends StatelessWidget {
             );
           },
           child: builder(
-            selected ? colorScheme.onPrimary : colorScheme.onSurfaceVariant,
+            selected
+                ? selectedForeground ?? colorScheme.onPrimary
+                : colorScheme.onSurfaceVariant,
           ),
         ),
       ),
@@ -432,6 +466,11 @@ class DashboardConnectedButton extends StatelessWidget {
 
 enum DashboardChipTone { idle, ok, warn }
 
+/// Loon's status badge: 18 high and hard-coded at that height, a 5 corner, a
+/// 10 pt medium label, and its colour carried as an 8% wash instead of a
+/// filled container — the same whisper step as the shadow. [large] steps the
+/// same badge up for the outbound detail sheet, where a 24 pt chip matches the
+/// rows around it.
 class DashboardChip extends StatelessWidget {
   const DashboardChip({
     super.key,
@@ -441,6 +480,9 @@ class DashboardChip extends StatelessWidget {
     this.large = false,
   });
 
+  static const height = DashboardMaterial.badgeHeight;
+  static const largeHeight = 24.0;
+
   final String label;
   final DashboardChipTone tone;
   final bool dot;
@@ -449,37 +491,190 @@ class DashboardChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
-    final colors = DashboardColors.of(context);
-    final (background, foreground) = switch (tone) {
-      DashboardChipTone.idle => (colors.tone, colorScheme.onSurfaceVariant),
-      DashboardChipTone.ok => (colors.okContainer, colors.onOkContainer),
-      DashboardChipTone.warn => (colors.warnContainer, colors.onWarnContainer),
+    final color = switch (tone) {
+      DashboardChipTone.idle => colorScheme.onSurfaceVariant,
+      DashboardChipTone.ok => colorScheme.success,
+      DashboardChipTone.warn => colorScheme.warning,
     };
+    final height = large ? largeHeight : DashboardChip.height;
     return Container(
-      height: large ? 28 : 24,
-      padding: EdgeInsets.symmetric(horizontal: large ? 12 : 10),
-      decoration: ShapeDecoration(color: background, shape: AppShape.full),
+      height: height,
+      padding: EdgeInsets.symmetric(horizontal: large ? 8 : 6),
+      decoration: ShapeDecoration(
+        color: color.withValues(alpha: DashboardMaterial.whisperAlpha),
+        shape: AppShape.all(DashboardCorner.chip),
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        spacing: 6,
+        spacing: 5,
         children: [
           if (dot)
             DecoratedBox(
               decoration: ShapeDecoration(
-                color: foreground,
+                color: color,
                 shape: AppShape.circle,
               ),
-              child: const SizedBox.square(dimension: 6),
+              child: const SizedBox.square(dimension: 5),
             ),
           Text(
             label,
             maxLines: 1,
-            style: AppTextStyle.caption1
-                .of(context, emphasized: true)
-                .toTabular
-                .copyWith(color: foreground),
+            style: DashboardText.badge(context, color: color, large: large),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Loon's segmented control: one recessed track, and the chosen segment is a
+/// *darker* well inside it whose label takes the accent colour — not a filled
+/// pill in the accent colour, which is what the connected-button group was.
+///
+/// Measured off its window: the track sits ~27 levels below the card, the well
+/// ~8 above the track and warmed by roughly an eighth of the selection colour,
+/// and only the chosen segment shows a glyph. Those three numbers are
+/// [DashboardMaterial.trackAlpha], [DashboardMaterial.segmentAlpha] and the
+/// label colour below.
+class DashboardSegmented<T> extends StatelessWidget {
+  const DashboardSegmented({
+    super.key,
+    required this.items,
+    required this.value,
+    required this.onSelected,
+    required this.labelOf,
+    required this.glyphOf,
+    this.height = 28,
+  });
+
+  final List<T> items;
+  final T value;
+  final ValueChanged<T> onSelected;
+  final String Function(T) labelOf;
+  final Glyph Function(T) glyphOf;
+  final double height;
+
+  /// The well has to clear the track by a hair on every side or the two read
+  /// as one shape — measured at 2.6 on Loon's 28pt control, so a hairline.
+  static const _inset = 2.5;
+
+  @override
+  Widget build(BuildContext context) {
+    // Loon's track corner sweeps about 0.28 of the control's height. [AppShape]
+    // draws a squircle, whose corner only reaches ~0.8 of the radius it is
+    // handed, so the parameter runs higher than the corner it draws; 0.34 lands
+    // on the same arc.
+    final radius = height * 0.34;
+    return Container(
+      height: height,
+      padding: const EdgeInsets.all(_inset),
+      decoration: ShapeDecoration(
+        color: Colors.black.withValues(alpha: DashboardMaterial.trackAlpha),
+        shape: AppShape.all(radius),
+      ),
+      child: Row(
+        children: [
+          for (final item in items)
+            Expanded(
+              child: _DashboardSegment(
+                selected: item == value,
+                label: labelOf(item),
+                glyph: glyphOf(item),
+                radius: math.max(0, radius - _inset),
+                onTap: () => onSelected(item),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Loon's accent is a deep saturated orange. The scheme's warning role is the
+/// same colour family but a pale apricot — it reads as cream on a dark well,
+/// where Loon's label pops. Pulling the lightness down and the saturation up
+/// recovers that without hard-coding a hex the theme would ignore.
+Color _selectionAccent(Color base) {
+  final hsl = HSLColor.fromColor(base);
+  return hsl
+      .withSaturation(math.max(hsl.saturation, 0.9))
+      .withLightness(math.min(hsl.lightness, 0.56))
+      .toColor();
+}
+
+class _DashboardSegment extends StatelessWidget {
+  const _DashboardSegment({
+    required this.selected,
+    required this.label,
+    required this.glyph,
+    required this.radius,
+    required this.onTap,
+  });
+
+  final bool selected;
+  final String label;
+  final Glyph glyph;
+  final double radius;
+  final VoidCallback onTap;
+
+  static const _glyphSize = 13.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
+    // Loon's selection colour is its warm accent, which is also the colour the
+    // home grid already uses for the proxy side of every legend; the scheme's
+    // primary is a desaturated blue in the default theme and turns the well
+    // grey, so the accent comes from the warning role instead. The fill takes
+    // the *container* tone: the plain warning is a pale apricot that lifts the
+    // well 15 levels off the track where Loon only lifts it eight, while the
+    // container lands within a level or two of Loon's measured well.
+    final accent = _selectionAccent(colorScheme.warning);
+    final wellColor = colorScheme.warningContainer.withValues(
+      alpha: DashboardMaterial.segmentAlpha,
+    );
+    final foreground = selected ? accent : colorScheme.onSurfaceVariant;
+    final shape = AppShape.all(radius);
+    return Semantics(
+      button: true,
+      selected: selected,
+      inMutuallyExclusiveGroup: true,
+      label: label,
+      excludeSemantics: true,
+      child: AnimatedContainer(
+        duration: context.motionDuration(const Duration(milliseconds: 180)),
+        curve: Curves.easeOutCubic,
+        decoration: ShapeDecoration(
+          color: selected ? wellColor : Colors.transparent,
+          shape: shape,
+        ),
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            customBorder: shape,
+            onTap: onTap,
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 4,
+                children: [
+                  if (selected)
+                    GlyphIcon(glyph, size: _glyphSize, color: foreground),
+                  Flexible(
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyle.footnote
+                          .of(context, emphasized: selected)
+                          .copyWith(color: foreground),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -839,6 +1034,12 @@ class DashboardIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
+    // Loon's icon buttons take the same 8% wash under the pointer as a badge
+    // takes as its fill, so hover and press never introduce a fourth weight.
+    final whisper = colorScheme.onSurfaceVariant.withValues(
+      alpha: DashboardMaterial.whisperAlpha,
+    );
     // A 24 tall card header would otherwise squeeze the circle into a pill.
     return SizedBox(
       width: size,
@@ -854,7 +1055,8 @@ class DashboardIconButton extends StatelessWidget {
             minimumSize: const Size.square(size),
             fixedSize: const Size.square(size),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            foregroundColor: context.colorScheme.onSurfaceVariant,
+            foregroundColor: colorScheme.onSurfaceVariant,
+            overlayColor: whisper,
           ),
           onPressed: onPressed,
           icon: GlyphIcon(glyph, size: glyphSize),

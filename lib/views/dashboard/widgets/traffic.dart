@@ -25,8 +25,8 @@ enum TrafficDirection {
   Glyph get glyph => this == upload ? AppGlyphs.arrowUp : AppGlyphs.arrowDown;
 
   Color colorOf(BuildContext context) => this == upload
-      ? DashboardColors.of(context).series2
-      : context.colorScheme.primary;
+      ? DashboardColors.of(context).uploadMark
+      : DashboardColors.of(context).downloadMark;
 
   Color glyphColorOf(BuildContext context) => this == upload
       ? context.colorScheme.onSurfaceVariant

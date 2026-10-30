@@ -48,7 +48,7 @@ void main() {
         seedColor: darkSeed,
         brightness: Brightness.dark,
         style: style,
-      ),
+      ).toLoonSurfaces(),
     );
   });
 

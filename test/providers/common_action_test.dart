@@ -79,54 +79,67 @@ void main() {
   });
 
   group('CommonAction.updateTraffic', () {
-    test('records the sampled traffic and the running total', () async {
+    test('reads the whole and the proxy half, and splits them exactly', () async {
       final container = buildContainer();
-      container
-          .read(appSettingProvider.notifier)
-          .update((state) => state.copyWith(onlyStatisticsProxy: true));
       when(
-        () => core.getTraffic(true),
-      ).thenAnswer((_) async => const Traffic(up: 10, down: 20));
+        () => core.getTotalTraffic(false),
+      ).thenAnswer((_) async => const Traffic(up: 300, down: 700));
       when(
         () => core.getTotalTraffic(true),
       ).thenAnswer((_) async => const Traffic(up: 100, down: 200));
 
       await container.read(commonActionProvider.notifier).updateTraffic();
 
-      expect(container.read(trafficsProvider).list.last.up, 10);
-      expect(container.read(trafficsProvider).list.last.down, 20);
-      expect(
-        container.read(totalTrafficProvider),
-        const Traffic(up: 100, down: 200),
-      );
-      verify(() => core.getTraffic(true)).called(1);
+      final totals = container.read(trafficTotalsProvider);
+      expect(totals.all, const Traffic(up: 300, down: 700));
+      expect(totals.proxy, const Traffic(up: 100, down: 200));
+      // The card reads all - proxy for the direct half; nothing else in the
+      // tree keeps that number.
+      expect(totals.all.up + totals.all.down - totals.proxy.up - totals.proxy.down, 700);
+      verify(() => core.getTotalTraffic(false)).called(1);
       verify(() => core.getTotalTraffic(true)).called(1);
     });
 
-    test('swallows a core failure and leaves the total untouched', () async {
+    test('the first beat sets the baseline instead of inventing a speed', () async {
+      final container = buildContainer();
+      when(
+        () => core.getTotalTraffic(any()),
+      ).thenAnswer((_) async => const Traffic(up: 100, down: 200));
+
+      await container.read(commonActionProvider.notifier).updateTraffic();
+
+      expect(container.read(trafficsProvider).list, isEmpty);
+      expect(container.read(totalTrafficProvider), const Traffic(up: 100, down: 200));
+    });
+
+    test('publishes the half the setting asks for', () async {
+      final container = buildContainer();
+      container
+          .read(appSettingProvider.notifier)
+          .update((state) => state.copyWith(onlyStatisticsProxy: true));
+      when(
+        () => core.getTotalTraffic(false),
+      ).thenAnswer((_) async => const Traffic(up: 300, down: 700));
+      when(
+        () => core.getTotalTraffic(true),
+      ).thenAnswer((_) async => const Traffic(up: 100, down: 200));
+
+      await container.read(commonActionProvider.notifier).updateTraffic();
+
+      expect(container.read(totalTrafficProvider), const Traffic(up: 100, down: 200));
+    });
+
+    test('a failed read moves neither the totals nor the baseline', () async {
       final container = buildContainer();
       final before = container.read(totalTrafficProvider);
-      when(() => core.getTraffic(any())).thenThrow(StateError('core down'));
+      when(() => core.getTotalTraffic(any())).thenThrow(StateError('core down'));
 
       await expectLater(
         container.read(commonActionProvider.notifier).updateTraffic(),
         completes,
       );
       expect(container.read(totalTrafficProvider), before);
-    });
-
-    test('does not record a total when only the total call fails', () async {
-      final container = buildContainer();
-      final before = container.read(totalTrafficProvider);
-      when(
-        () => core.getTraffic(any()),
-      ).thenAnswer((_) async => const Traffic(up: 1, down: 2));
-      when(() => core.getTotalTraffic(any())).thenThrow(StateError('boom'));
-
-      await container.read(commonActionProvider.notifier).updateTraffic();
-
-      expect(container.read(trafficsProvider).list.last.up, 1);
-      expect(container.read(totalTrafficProvider), before);
+      expect(container.read(trafficTotalsProvider).all, const Traffic());
     });
 
     test(
@@ -134,7 +147,6 @@ void main() {
       () async {
         final container = buildContainer();
         final completer = Completer<Traffic>();
-        when(() => core.getTraffic(any())).thenAnswer((_) => completer.future);
         when(
           () => core.getTotalTraffic(any()),
         ).thenAnswer((_) => completer.future);
@@ -150,10 +162,66 @@ void main() {
         completer.complete(const Traffic(up: 5, down: 10));
         await first;
 
-        verify(() => core.getTraffic(any())).called(1);
-        verify(() => core.getTotalTraffic(any())).called(1);
+        verify(() => core.getTotalTraffic(any())).called(2);
+        verifyNever(() => core.getTraffic(any()));
       },
     );
+  });
+
+  group('CommonAction.rateBetween', () {
+    test('divides the difference by the window that actually passed', () {
+      expect(
+        CommonAction.rateBetween(
+          const Traffic(),
+          const Traffic(up: 1024, down: 2048),
+          const Duration(seconds: 1),
+        ),
+        const Traffic(up: 1024, down: 2048),
+      );
+      expect(
+        CommonAction.rateBetween(
+          const Traffic(),
+          const Traffic(up: 500, down: 1000),
+          const Duration(milliseconds: 500),
+        ),
+        const Traffic(up: 1000, down: 2000),
+      );
+      expect(
+        CommonAction.rateBetween(
+          const Traffic(up: 100, down: 100),
+          const Traffic(up: 1600, down: 2100),
+          const Duration(seconds: 2),
+        ),
+        const Traffic(up: 750, down: 1000),
+      );
+    });
+
+    test('refuses windows that say nothing about the speed', () {
+      const before = Traffic(up: 10, down: 10);
+      const after = Traffic(up: 20, down: 20);
+      expect(
+        CommonAction.rateBetween(before, after, const Duration(milliseconds: 50)),
+        isNull,
+        reason: 'shorter than a beat divides noise',
+      );
+      expect(
+        CommonAction.rateBetween(before, after, const Duration(seconds: 6)),
+        isNull,
+        reason: 'the app was paused, not slow',
+      );
+    });
+
+    test('refuses a total that went backwards', () {
+      expect(
+        CommonAction.rateBetween(
+          const Traffic(up: 5000, down: 5000),
+          const Traffic(up: 10, down: 10),
+          const Duration(seconds: 1),
+        ),
+        isNull,
+        reason: 'a restart is not a negative speed',
+      );
+    });
   });
 
   group('CommonAction.autoCheckUpdate', () {

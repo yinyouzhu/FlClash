@@ -622,6 +622,182 @@ abstract class _$TotalTraffic extends $Notifier<Traffic> {
   }
 }
 
+/// What the Core has carried since it started, both ways, and how much of it
+/// went through a proxy.
+///
+/// The Core keeps the two counters apart itself — it adds to the proxy pair
+/// only when the chain's exit is not a direct outbound — so the difference is
+/// the direct half, exactly, instead of an estimate.
+
+@ProviderFor(TrafficTotals)
+final trafficTotalsProvider = TrafficTotalsProvider._();
+
+/// What the Core has carried since it started, both ways, and how much of it
+/// went through a proxy.
+///
+/// The Core keeps the two counters apart itself — it adds to the proxy pair
+/// only when the chain's exit is not a direct outbound — so the difference is
+/// the direct half, exactly, instead of an estimate.
+final class TrafficTotalsProvider
+    extends $NotifierProvider<TrafficTotals, ({Traffic all, Traffic proxy})> {
+  /// What the Core has carried since it started, both ways, and how much of it
+  /// went through a proxy.
+  ///
+  /// The Core keeps the two counters apart itself — it adds to the proxy pair
+  /// only when the chain's exit is not a direct outbound — so the difference is
+  /// the direct half, exactly, instead of an estimate.
+  TrafficTotalsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'trafficTotalsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$trafficTotalsHash();
+
+  @$internal
+  @override
+  TrafficTotals create() => TrafficTotals();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(({Traffic all, Traffic proxy}) value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<({Traffic all, Traffic proxy})>(
+        value,
+      ),
+    );
+  }
+}
+
+String _$trafficTotalsHash() => r'980bc9359abd75b9b80dfb26c5f56db5a97275f6';
+
+/// What the Core has carried since it started, both ways, and how much of it
+/// went through a proxy.
+///
+/// The Core keeps the two counters apart itself — it adds to the proxy pair
+/// only when the chain's exit is not a direct outbound — so the difference is
+/// the direct half, exactly, instead of an estimate.
+
+abstract class _$TrafficTotals
+    extends $Notifier<({Traffic all, Traffic proxy})> {
+  ({Traffic all, Traffic proxy}) build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref =
+        this.ref
+            as $Ref<
+              ({Traffic all, Traffic proxy}),
+              ({Traffic all, Traffic proxy})
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                ({Traffic all, Traffic proxy}),
+                ({Traffic all, Traffic proxy})
+              >,
+              ({Traffic all, Traffic proxy}),
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
+/// The connections this run has opened, counted as they open.
+///
+/// The Core reports every connection once, when it is set up, so this only
+/// ever grows — the number Loon shows on the same card, and the reason it does
+/// not fall back while traffic is quiet. Only a stop, or a new run, clears it.
+///
+/// The ids are remembered so a connection the Core reports twice (it pushes
+/// the same one again with its final traffic) is not counted twice.
+
+@ProviderFor(SessionConnections)
+final sessionConnectionsProvider = SessionConnectionsProvider._();
+
+/// The connections this run has opened, counted as they open.
+///
+/// The Core reports every connection once, when it is set up, so this only
+/// ever grows — the number Loon shows on the same card, and the reason it does
+/// not fall back while traffic is quiet. Only a stop, or a new run, clears it.
+///
+/// The ids are remembered so a connection the Core reports twice (it pushes
+/// the same one again with its final traffic) is not counted twice.
+final class SessionConnectionsProvider
+    extends $NotifierProvider<SessionConnections, ConnectionSplit> {
+  /// The connections this run has opened, counted as they open.
+  ///
+  /// The Core reports every connection once, when it is set up, so this only
+  /// ever grows — the number Loon shows on the same card, and the reason it does
+  /// not fall back while traffic is quiet. Only a stop, or a new run, clears it.
+  ///
+  /// The ids are remembered so a connection the Core reports twice (it pushes
+  /// the same one again with its final traffic) is not counted twice.
+  SessionConnectionsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'sessionConnectionsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$sessionConnectionsHash();
+
+  @$internal
+  @override
+  SessionConnections create() => SessionConnections();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ConnectionSplit value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ConnectionSplit>(value),
+    );
+  }
+}
+
+String _$sessionConnectionsHash() =>
+    r'4f83b1e18da8754f1ed9ffec65cec25c3a883722';
+
+/// The connections this run has opened, counted as they open.
+///
+/// The Core reports every connection once, when it is set up, so this only
+/// ever grows — the number Loon shows on the same card, and the reason it does
+/// not fall back while traffic is quiet. Only a stop, or a new run, clears it.
+///
+/// The ids are remembered so a connection the Core reports twice (it pushes
+/// the same one again with its final traffic) is not counted twice.
+
+abstract class _$SessionConnections extends $Notifier<ConnectionSplit> {
+  ConnectionSplit build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<ConnectionSplit, ConnectionSplit>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<ConnectionSplit, ConnectionSplit>,
+              ConnectionSplit,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
 @ProviderFor(LoadedLocale)
 final loadedLocaleProvider = LoadedLocaleProvider._();
 

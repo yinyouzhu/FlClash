@@ -67,7 +67,10 @@ class _HomeShell extends ConsumerWidget {
       appSettingProvider.select((state) => state.floatingNavigationBar),
     );
     return Material(
-      color: SurfaceLevel.page.colorOf(context.colorScheme),
+      // The whole window paints the page once in AppSidebarContainer; this
+      // shell stays clear so the sidebar and content read as one surface
+      // instead of the content getting a second tint on top.
+      color: Colors.transparent,
       child: Column(
         children: [
           Expanded(

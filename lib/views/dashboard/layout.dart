@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:material_ui/material_ui.dart';
 
 const _minDesktopWidth = 640.0;
-const _minFourColumnWidth = 860.0;
+const _minFourColumnWidth = 740.0;
 const _minStandardFourColumnWidth = 1040.0;
 const _minStandardHeight = 824.0;
 const _mobileMaxWidth = 560.0;

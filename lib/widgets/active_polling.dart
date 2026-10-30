@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fl_clash/common/print.dart';
+import 'package:fl_clash/common/system.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/ui/inherited.dart';
 import 'package:flutter/widgets.dart';
@@ -27,15 +28,27 @@ mixin ActivePollingMixin<T extends StatefulWidget>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    final lifecycleState = WidgetsBinding.instance.lifecycleState;
-    _isForeground =
-        lifecycleState == null || lifecycleState == AppLifecycleState.resumed;
+    _isForeground = _showsData(WidgetsBinding.instance.lifecycleState);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         _syncPolling();
       }
     });
   }
+
+  /// Whether the app is in a state where its numbers should keep moving.
+  ///
+  /// A desktop window that loses focus is `inactive`, not hidden, and it stays
+  /// on screen: treating that as gone froze every polled number until the next
+  /// click brought the window forward again, which is exactly how it looked —
+  /// the panel only refreshed when it was clicked.
+  bool _showsData(AppLifecycleState? state) => switch (state) {
+    null || AppLifecycleState.resumed => true,
+    AppLifecycleState.inactive => system.isDesktop,
+    AppLifecycleState.hidden ||
+    AppLifecycleState.paused ||
+    AppLifecycleState.detached => false,
+  };
 
   @override
   void didChangeDependencies() {
@@ -55,7 +68,7 @@ mixin ActivePollingMixin<T extends StatefulWidget>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    final isForeground = state == AppLifecycleState.resumed;
+    final isForeground = _showsData(state);
     if (_isForeground == isForeground) {
       return;
     }

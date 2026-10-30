@@ -264,6 +264,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Update profiles",
     ),
     "actionView": MessageLookupByLibrary.simpleMessage("Show/Hide"),
+    "activeProcesses": MessageLookupByLibrary.simpleMessage("Active processes"),
     "add": MessageLookupByLibrary.simpleMessage("Add"),
     "addCustomProxy": MessageLookupByLibrary.simpleMessage("Add proxy"),
     "addFilters": MessageLookupByLibrary.simpleMessage("Add filters"),
@@ -534,6 +535,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "create": MessageLookupByLibrary.simpleMessage("Create"),
     "createProfileFromUrlTip": m7,
     "creationTime": MessageLookupByLibrary.simpleMessage("Creation time"),
+    "currentNode": MessageLookupByLibrary.simpleMessage("Current node"),
     "currentOutboundDesc": MessageLookupByLibrary.simpleMessage(
       "Holds the start button and can\'t be removed",
     ),
@@ -1192,6 +1194,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "networkConnectionError": MessageLookupByLibrary.simpleMessage(
       "Couldn\'t connect to the server. Check your network connection or proxy settings",
     ),
+    "networkEnvironment": MessageLookupByLibrary.simpleMessage(
+      "Network environment",
+    ),
     "networkHostLookupError": MessageLookupByLibrary.simpleMessage(
       "Couldn\'t resolve the server address. Check that the URL is correct and DNS is working",
     ),
@@ -1228,6 +1233,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noSearchResults": MessageLookupByLibrary.simpleMessage(
       "No matching results",
     ),
+    "nodeHealth": MessageLookupByLibrary.simpleMessage("Node health"),
     "nodes": MessageLookupByLibrary.simpleMessage("Nodes"),
     "nonTextProviderFile": MessageLookupByLibrary.simpleMessage(
       "This external resource is not a text file",
@@ -1370,6 +1376,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "proxiesProfileLabel": m67,
     "proxiesRemovedTip": m68,
     "proxiesReplacedTip": m69,
+    "proxy": MessageLookupByLibrary.simpleMessage("Proxy"),
     "proxyChains": MessageLookupByLibrary.simpleMessage("Proxy chain"),
     "proxyGroup": MessageLookupByLibrary.simpleMessage("Proxy group"),
     "proxyGroupEmpty": MessageLookupByLibrary.simpleMessage(
@@ -1395,12 +1402,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "quickActions": MessageLookupByLibrary.simpleMessage("Quick actions"),
     "quickEdit": MessageLookupByLibrary.simpleMessage("Quick edit"),
+    "quickSwitches": MessageLookupByLibrary.simpleMessage("Quick switches"),
     "recentRequests": MessageLookupByLibrary.simpleMessage("Recent requests"),
     "recommendedIcons": MessageLookupByLibrary.simpleMessage("Suggested"),
     "recordType": MessageLookupByLibrary.simpleMessage("Record type"),
     "redirPort": MessageLookupByLibrary.simpleMessage("Redir port"),
     "redo": MessageLookupByLibrary.simpleMessage("Redo"),
     "regex": MessageLookupByLibrary.simpleMessage("Regex"),
+    "reject": MessageLookupByLibrary.simpleMessage("Reject"),
     "releaseMemory": MessageLookupByLibrary.simpleMessage("Release memory"),
     "releaseMemoryFailed": MessageLookupByLibrary.simpleMessage(
       "Failed to release memory",
@@ -1693,6 +1702,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "serviceUnsupportedRegion": MessageLookupByLibrary.simpleMessage(
       "Region not supported",
     ),
+    "sessionConnections": MessageLookupByLibrary.simpleMessage(
+      "Session connections",
+    ),
     "settingEntries": MessageLookupByLibrary.simpleMessage("settings"),
     "settings": MessageLookupByLibrary.simpleMessage("Settings"),
     "settingsCount": m77,
@@ -1712,7 +1724,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "showPassword": MessageLookupByLibrary.simpleMessage("Show password"),
     "sidebar": MessageLookupByLibrary.simpleMessage("Sidebar"),
     "sidebarBlurDesc": MessageLookupByLibrary.simpleMessage(
-      "Background blur lets the desktop behind the window show through the sidebar.",
+      "Background blur lets the desktop behind the window show through the whole interface as a frosted glass layer.",
     ),
     "silentLaunch": MessageLookupByLibrary.simpleMessage("Silent launch"),
     "silentLaunchDesc": MessageLookupByLibrary.simpleMessage(
@@ -1753,6 +1765,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "specialProxy": MessageLookupByLibrary.simpleMessage("Special proxy"),
     "specialRules": MessageLookupByLibrary.simpleMessage("Special rules"),
     "spectrum": MessageLookupByLibrary.simpleMessage("Spectrum"),
+    "speed": MessageLookupByLibrary.simpleMessage("Speed"),
     "speedStatistics": MessageLookupByLibrary.simpleMessage("Speed statistics"),
     "splitStrategy": MessageLookupByLibrary.simpleMessage("Split strategy"),
     "splitStrategyNotEmpty": MessageLookupByLibrary.simpleMessage(

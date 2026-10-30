@@ -21,6 +21,9 @@ struct WindowStyle {
     var effect: WindowEffect = .none
     var effectTint: NSColor?
     var effectAppearance: NSAppearance?
+    /// Composites the frost at less than full strength so the raw desktop shows
+    /// through; nil is fully opaque frost.
+    var effectOpacity: CGFloat?
 
     func apply(to window: NSWindow) {
         switch titleBarStyle {
@@ -50,6 +53,12 @@ struct WindowStyle {
         // Glass picks its light or dark material from the window, not its own view.
         window.appearance = effect == .glass ? effectAppearance : nil
 
-        WindowEffectView.apply(effect, tint: effectTint, appearance: effectAppearance, to: window)
+        WindowEffectView.apply(
+            effect,
+            tint: effectTint,
+            appearance: effectAppearance,
+            opacity: effectOpacity,
+            to: window
+        )
     }
 }

@@ -11,7 +11,28 @@ import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window/window.dart';
 
 class Window implements WindowPort {
-  static const _tintOpacity = 0.5;
+  /// A tint this heavy keeps the page's own charcoal in charge while the
+  /// material still shimmers through; lower values washed the card step out
+  /// over a light desktop.
+  static const _tintOpacity = 0.75;
+  /// How much of its own colour the page keeps over the native frost. It is
+  /// handed to the theme as the page's alpha.
+  ///
+  /// Zero, because Loon has no such layer: its window is the vibrancy material
+  /// plus one black tint, nothing else. This layer paints the theme's neutral
+  /// cool grey, so any value above zero desaturates the warmth coming through
+  /// from the desktop — the "wrong colour, nothing like Loon" the user reported.
+  static const _macTintOpacity = 0.0;
+  /// The frost's colour on macOS. Loon paints a black tint over the vibrancy
+  /// material, so the pane's hue is entirely the desktop's and the tint only
+  /// decides how dark it is. Measured off Loon's own view: aqua 0.18, dark 0.24.
+  static const _macTintAquaAlpha = 0.18;
+  static const _macTintDarkAlpha = 0.24;
+  /// Thins the vibrancy material itself. **Must stay 1.0.** Masking the
+  /// material below 1 does not produce "lighter glass": the masked-out part is
+  /// simply not drawn, so the *unblurred* desktop shows straight through and any
+  /// window behind becomes legible — the pane reads as a hole, not as glass.
+  static const _macFrostOpacity = 1.0;
   static Window? _instance;
   bool _supportsPosition = false;
   WindowEffect? _blurEffect;
@@ -126,8 +147,13 @@ class Window implements WindowPort {
     if (cached != null) {
       return cached;
     }
+    // macOS 26's Liquid Glass (`.glass`) is a clear, refractive material whose
+    // centre shows the wallpaper straight through instead of frosting it, so it
+    // never reads as the uniform frosted panel Loon uses. The classic vibrancy
+    // material (`.blur`) frosts the desktop behind the whole window, which is
+    // the look we want; keep `.glass` only as a last-resort fallback.
     final candidates = system.isMacOS
-        ? const [WindowEffect.glass, WindowEffect.blur]
+        ? const [WindowEffect.blur, WindowEffect.glass]
         : const [WindowEffect.mica, WindowEffect.acrylic, WindowEffect.blur];
     for (final effect in candidates) {
       if (await desktopWindow.isEffectSupported(effect)) {
@@ -153,10 +179,23 @@ class Window implements WindowPort {
     final effect = enabled ? await _resolveBlurEffect() : WindowEffect.none;
     await desktopWindow.setEffect(
       effect,
-      tint: system.isWindows ? tint.withValues(alpha: _tintOpacity) : null,
+      // Windows takes its native accent tint. On macOS the tint is plain black
+      // over the vibrancy material, exactly as Loon does it, so the pane keeps
+      // the desktop's own hue and only gains weight — a coloured tint here would
+      // double-tint what is already coming through the frost.
+      tint: !enabled
+          ? null
+          : system.isWindows
+          ? tint.withValues(alpha: _tintOpacity)
+          : Colors.black.withValues(
+              alpha: brightness == Brightness.dark
+                  ? _macTintDarkAlpha
+                  : _macTintAquaAlpha,
+            ),
       brightness: brightness,
+      opacity: system.isMacOS && enabled ? _macFrostOpacity : null,
     );
-    return effect == WindowEffect.none ? null : _tintOpacity;
+    return effect == WindowEffect.none ? null : _macTintOpacity;
   }
 
   /// Every desktop runner leaves the window hidden until [init] reveals it, so
