@@ -246,6 +246,7 @@ class SetupAction extends _$SetupAction {
     // A stop ends the run, so the connections it opened are no longer this
     // session's: the count starts over with the next start, as Loon's does.
     ref.read(sessionConnectionsProvider.notifier).reset();
+    ref.read(sessionProcessesProvider.notifier).reset();
     // A silent Core is gone or hung; running again would proxy traffic to it.
     if (!answered) {
       throw _unanswered(CoreMethod.stopListener);

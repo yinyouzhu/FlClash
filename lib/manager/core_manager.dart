@@ -148,12 +148,19 @@ class _CoreContainerState extends ConsumerState<CoreManager>
     // opens and closes between two polls would otherwise never be counted, and
     // the card's number would fall back as connections close.
     ref.read(sessionConnectionsProvider.notifier).add(trackerInfo);
+    // The same events feed the process card: a connection that closes takes
+    // its row with it otherwise, and Loon's card keeps the process listed.
+    ref.read(sessionProcessesProvider.notifier).add(trackerInfo);
     super.onRequest(trackerInfo);
   }
 
   @override
   void onRequestTraffic(Map<String, RequestTraffic> traffic) {
     ref.read(requestsProvider.notifier).updateTraffic(traffic);
+    // The same reports carry the bytes the process card totals: a connection
+    // only announces itself once, so without these its row would freeze at
+    // whatever the opening beat carried.
+    ref.read(sessionProcessesProvider.notifier).updateTraffic(traffic);
     super.onRequestTraffic(traffic);
   }
 

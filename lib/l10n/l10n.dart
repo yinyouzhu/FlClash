@@ -8103,6 +8103,16 @@ class AppLocalizations {
     );
   }
 
+  /// `Turn on Find process to show`
+  String get activeProcessesHint {
+    return Intl.message(
+      'Shows after TUN is enabled',
+      name: 'activeProcessesHint',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Network environment`
   String get networkEnvironment {
     return Intl.message(

@@ -269,6 +269,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "activeProcesses": MessageLookupByLibrary.simpleMessage(
       "Активные процессы",
     ),
+    "activeProcessesHint": MessageLookupByLibrary.simpleMessage("Включите «Поиск процесса», чтобы показать"),
     "add": MessageLookupByLibrary.simpleMessage("Добавить"),
     "addCustomProxy": MessageLookupByLibrary.simpleMessage("Добавить прокси"),
     "addFilters": MessageLookupByLibrary.simpleMessage("Добавить фильтры"),

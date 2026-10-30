@@ -272,6 +272,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "actionView": MessageLookupByLibrary.simpleMessage("Mostrar/Ocultar"),
     "activeProcesses": MessageLookupByLibrary.simpleMessage("Procesos activos"),
+    "activeProcessesHint": MessageLookupByLibrary.simpleMessage("Activa Buscar proceso para mostrar"),
     "add": MessageLookupByLibrary.simpleMessage("Añadir"),
     "addCustomProxy": MessageLookupByLibrary.simpleMessage("Añadir proxy"),
     "addFilters": MessageLookupByLibrary.simpleMessage("Añadir filtros"),

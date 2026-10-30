@@ -237,6 +237,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionUpdateProfiles": MessageLookupByLibrary.simpleMessage("プロファイルを更新"),
     "actionView": MessageLookupByLibrary.simpleMessage("表示/非表示"),
     "activeProcesses": MessageLookupByLibrary.simpleMessage("アクティブなプロセス"),
+    "activeProcessesHint": MessageLookupByLibrary.simpleMessage("プロセス検出を有効にすると表示"),
     "add": MessageLookupByLibrary.simpleMessage("追加"),
     "addCustomProxy": MessageLookupByLibrary.simpleMessage("プロキシを追加"),
     "addFilters": MessageLookupByLibrary.simpleMessage("フィルターを追加"),

@@ -971,6 +971,7 @@
   "sessionConnections": "Соединения сеанса",
   "quickSwitches": "Быстрые переключатели",
   "activeProcesses": "Активные процессы",
+  "activeProcessesHint": "Включите «Поиск процесса», чтобы показать",
   "networkEnvironment": "Сеть",
   "currentNode": "Текущий узел"
 }

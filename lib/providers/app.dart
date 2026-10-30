@@ -256,6 +256,154 @@ class SessionConnections extends _$SessionConnections
   }
 }
 
+/// One process's share of the session, the way the dashboard's process card
+/// reads it: the traffic it has moved since the run started, how many
+/// connections it opened, and the speed measured off its own traffic.
+typedef SessionProcessUsage = ({
+  int traffic,
+  int connections,
+  String executable,
+  double rate,
+  DateTime updatedAt,
+});
+
+/// Kept beside [SessionConnections] and fed by the same two event streams the
+/// requests page uses: [add] when a connection opens, [updateTraffic] as the
+/// Core reports the bytes it has carried since. The reports are cumulative per
+/// connection, so each one is banked as the difference against the last value
+/// seen for that id — summing them raw would count the same bytes once per
+/// beat, and taking only the opening report would count none of them.
+@Riverpod(keepAlive: true)
+class SessionProcesses extends _$SessionProcesses
+    with AutoDisposeNotifierMixin {
+  /// Long enough to still recognise a connection whose next report lands
+  /// minutes later, short enough to stay a few megabytes at most.
+  static const _remembered = 20000;
+
+  /// The rate is measured per process over its own window rather than read
+  /// off a connection: the Core's per-connection speed fields stay at zero on
+  /// this path, and a row that always says 0 B/s reads as a broken card.
+  static const _rateWindow = Duration(milliseconds: 500);
+
+  final _totals = <String, SessionProcessUsage>{};
+  final _meta = <String, ({String process, String executable})>{};
+  final _bytes = <String, int>{};
+  final _windows = <String, ({DateTime at, int bytes})>{};
+
+  @override
+  Map<String, SessionProcessUsage> build() => const {};
+
+  void add(TrackerInfo info) {
+    final process = info.metadata.process.trim();
+    // The Core labels its own probes as "mihomo" and gives them no client
+    // endpoint; only a connection an app opened has a source address.
+    if (process.isEmpty || info.metadata.sourceIP.trim().isEmpty) {
+      return;
+    }
+    final executable = info.metadata.processPath.trim();
+    final total = info.upload + info.download;
+    _meta[info.id] = (process: process, executable: executable);
+    _trim();
+    _apply(
+      id: info.id,
+      process: process,
+      executable: executable,
+      total: total,
+      opening: true,
+    );
+  }
+
+  void updateTraffic(Map<String, RequestTraffic> traffic) {
+    if (_meta.isEmpty || !ref.mounted) {
+      return;
+    }
+    var changed = false;
+    traffic.forEach((id, item) {
+      final meta = _meta[id];
+      if (meta == null) {
+        return;
+      }
+      if (_apply(
+        id: id,
+        process: meta.process,
+        executable: meta.executable,
+        total: item.upload + item.download,
+        opening: false,
+      )) {
+        changed = true;
+      }
+    });
+    if (changed && ref.mounted) {
+      value = Map.unmodifiable(_totals);
+    }
+  }
+
+  bool _apply({
+    required String id,
+    required String process,
+    required String executable,
+    required int total,
+    required bool opening,
+  }) {
+    final previousBytes = _bytes[id];
+    final growth = total - (previousBytes ?? 0);
+    if (previousBytes != null && growth <= 0) {
+      return false;
+    }
+    _bytes[id] = total;
+    final current = _totals[process];
+    final traffic = (current?.traffic ?? 0) + growth;
+
+    final now = DateTime.now();
+    final window = _windows[process];
+    var rate = current?.rate ?? 0;
+    if (window == null) {
+      _windows[process] = (at: now, bytes: traffic);
+    } else {
+      final elapsed = now.difference(window.at).inMicroseconds / 1e6;
+      if (elapsed >= _rateWindow.inMicroseconds / 1e6) {
+        final measured = (traffic - window.bytes) / elapsed;
+        rate = rate == 0 ? measured : rate * 0.4 + measured * 0.6;
+        _windows[process] = (at: now, bytes: traffic);
+      }
+    }
+
+    _totals[process] = (
+      traffic: traffic,
+      connections: (current?.connections ?? 0) + (opening ? 1 : 0),
+      // The path is what the row needs for its icon; keep the first one the
+      // process was seen with, since it never changes for a running process.
+      executable: (current?.executable.isNotEmpty ?? false)
+          ? current!.executable
+          : executable,
+      rate: rate,
+      updatedAt: now,
+    );
+    if (ref.mounted) {
+      value = Map.unmodifiable(_totals);
+    }
+    return true;
+  }
+
+  void _trim() {
+    while (_meta.length > _remembered) {
+      final oldest = _meta.keys.first;
+      _meta.remove(oldest);
+      _bytes.remove(oldest);
+    }
+  }
+
+  void reset() {
+    _totals.clear();
+    _meta.clear();
+    _bytes.clear();
+    _windows.clear();
+    if (ref.mounted) {
+      value = const {};
+    }
+  }
+}
+
 @Riverpod(keepAlive: true)
 class LoadedLocale extends _$LoadedLocale with AutoDisposeNotifierMixin {
   @override

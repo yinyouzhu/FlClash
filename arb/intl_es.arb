@@ -971,6 +971,7 @@
   "sessionConnections": "Conexiones de la sesión",
   "quickSwitches": "Interruptores rápidos",
   "activeProcesses": "Procesos activos",
+  "activeProcessesHint": "Activa Buscar proceso para mostrar",
   "networkEnvironment": "Red",
   "currentNode": "Nodo actual"
 }

@@ -245,6 +245,10 @@ class _HomeDashboardState extends ConsumerState<_HomeDashboard>
     // still open: that list empties as connections finish, and a number that
     // falls back while nothing is wrong reads as a bug.
     final session = ref.watch(sessionConnectionsProvider);
+    // Per-process totals for the whole run: the live connection list alone
+    // empties the card the moment a request finishes, which is why Loon's
+    // rows outlive the connections they came from.
+    final sessionProcesses = ref.watch(sessionProcessesProvider);
     // The totals the Core keeps, rather than a running sum of the connections
     // this page happened to see: a connection that opens and closes inside one
     // beat never shows up in a poll, and on a page of short requests that is
@@ -312,7 +316,12 @@ class _HomeDashboardState extends ConsumerState<_HomeDashboard>
             SizedBox(
               height: 218 * scale * fit,
               child: row([
-                (1, ProcessListCard(processes: _processesOf(connections))),
+                (
+                  1,
+                  ProcessListCard(
+                    processes: _processesOf(connections, sessionProcesses),
+                  ),
+                ),
                 // Where the profiles card used to sit, at its size: the two
                 // panels are read together while traffic is running, and the
                 // speed graph wants the whole row above them.
@@ -346,13 +355,28 @@ class _HomeDashboardState extends ConsumerState<_HomeDashboard>
   }
 }
 
-List<ProcessUsage> _processesOf(List<TrackerInfo> connections) {
-  final totals = <String, ({int traffic, int connections, int speed})>{};
+List<ProcessUsage> _processesOf(
+  List<TrackerInfo> connections,
+  Map<String, SessionProcessUsage> session,
+) {
+  // What is open right now answers two of the four columns — the speed and the
+  // live connection count — while the traffic comes from the run's totals, so
+  // a row that finished keeps its number instead of dropping to zero.
+  final live = <String, ({int traffic, int connections, int speed})>{};
+  final paths = <String, String>{};
   for (final item in connections) {
     final process = item.metadata.process.trim();
     if (process.isEmpty) continue;
-    final current = totals[process];
-    totals[process] = (
+    // The core labels its own probes as "mihomo" and gives them no client
+    // endpoint; only a connection an app opened has a source address.
+    if (item.metadata.sourceIP.trim().isEmpty) continue;
+    final path = item.metadata.processPath.trim();
+    // Only what runs out of an app bundle: a daemon or a helper with no app
+    // behind it leaves a row nobody can name, and Loon never shows one.
+    if (!path.contains('.app/')) continue;
+    paths.putIfAbsent(process, () => path);
+    final current = live[process];
+    live[process] = (
       traffic: (current?.traffic ?? 0) + item.upload + item.download,
       connections: (current?.connections ?? 0) + 1,
       speed:
@@ -361,13 +385,32 @@ List<ProcessUsage> _processesOf(List<TrackerInfo> connections) {
           (item.downloadSpeed ?? 0),
     );
   }
+  final names = {
+    ...session.entries
+        .where((entry) => entry.value.executable.contains('.app/'))
+        .map((entry) => entry.key),
+    ...live.keys,
+  };
+  final now = DateTime.now();
   return [
-    for (final entry in totals.entries)
+    for (final name in names)
       ProcessUsage(
-        name: entry.key,
-        traffic: entry.value.traffic,
-        connections: entry.value.connections,
-        speed: entry.value.speed,
+        name: name,
+        // The row's icon and app name come from the executable, so a process
+        // that has already closed keeps the path it was first seen with.
+        executable: paths[name] ?? session[name]?.executable ?? '',
+        traffic: math.max(
+          session[name]?.traffic ?? 0,
+          live[name]?.traffic ?? 0,
+        ),
+        connections: live[name]?.connections ?? 0,
+        // Measured from the run's own totals: the Core's per-connection speed
+        // reads zero here, and a stale rate is worse than an honest zero.
+        speed: switch (session[name]) {
+          final usage? when now.difference(usage.updatedAt).inSeconds < 3 =>
+            usage.rate.round(),
+          _ => live[name]?.speed ?? 0,
+        },
       ),
   ]..sort((a, b) => b.traffic.compareTo(a.traffic));
 }

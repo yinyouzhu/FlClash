@@ -971,6 +971,7 @@
   "sessionConnections": "이번 연결",
   "quickSwitches": "빠른 전환",
   "activeProcesses": "활성 프로세스",
+  "activeProcessesHint": "프로세스 찾기를 켜면 표시됩니다",
   "networkEnvironment": "네트워크 환경",
   "currentNode": "현재 노드"
 }

@@ -971,6 +971,7 @@
   "sessionConnections": "本次连接",
   "quickSwitches": "快捷开关",
   "activeProcesses": "活跃进程",
+  "activeProcessesHint": "开启“查找进程”后显示",
   "networkEnvironment": "网络环境",
   "currentNode": "当前节点"
 }

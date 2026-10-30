@@ -971,6 +971,7 @@
   "sessionConnections": "Session connections",
   "quickSwitches": "Quick switches",
   "activeProcesses": "Active processes",
+  "activeProcessesHint": "Turn on Find process to show",
   "networkEnvironment": "Network environment",
   "currentNode": "Current node"
 }

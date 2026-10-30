@@ -798,6 +798,92 @@ abstract class _$SessionConnections extends $Notifier<ConnectionSplit> {
   }
 }
 
+/// Kept beside [SessionConnections] and fed by the same events. The Core
+/// reports a connection again as it carries traffic, so each report is banked
+/// as the difference against the last one for that id: summing every report
+/// would count the same bytes once per beat, and taking only the first would
+/// count none of them.
+
+@ProviderFor(SessionProcesses)
+final sessionProcessesProvider = SessionProcessesProvider._();
+
+/// Kept beside [SessionConnections] and fed by the same events. The Core
+/// reports a connection again as it carries traffic, so each report is banked
+/// as the difference against the last one for that id: summing every report
+/// would count the same bytes once per beat, and taking only the first would
+/// count none of them.
+final class SessionProcessesProvider
+    extends
+        $NotifierProvider<SessionProcesses, Map<String, SessionProcessUsage>> {
+  /// Kept beside [SessionConnections] and fed by the same events. The Core
+  /// reports a connection again as it carries traffic, so each report is banked
+  /// as the difference against the last one for that id: summing every report
+  /// would count the same bytes once per beat, and taking only the first would
+  /// count none of them.
+  SessionProcessesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'sessionProcessesProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$sessionProcessesHash();
+
+  @$internal
+  @override
+  SessionProcesses create() => SessionProcesses();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Map<String, SessionProcessUsage> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Map<String, SessionProcessUsage>>(
+        value,
+      ),
+    );
+  }
+}
+
+String _$sessionProcessesHash() => r'81205a15f8b340864fee61a417051fd55954c9ea';
+
+/// Kept beside [SessionConnections] and fed by the same events. The Core
+/// reports a connection again as it carries traffic, so each report is banked
+/// as the difference against the last one for that id: summing every report
+/// would count the same bytes once per beat, and taking only the first would
+/// count none of them.
+
+abstract class _$SessionProcesses
+    extends $Notifier<Map<String, SessionProcessUsage>> {
+  Map<String, SessionProcessUsage> build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref =
+        this.ref
+            as $Ref<
+              Map<String, SessionProcessUsage>,
+              Map<String, SessionProcessUsage>
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                Map<String, SessionProcessUsage>,
+                Map<String, SessionProcessUsage>
+              >,
+              Map<String, SessionProcessUsage>,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
 @ProviderFor(LoadedLocale)
 final loadedLocaleProvider = LoadedLocaleProvider._();
 

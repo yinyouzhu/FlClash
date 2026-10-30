@@ -971,6 +971,7 @@
   "sessionConnections": "今回の接続",
   "quickSwitches": "クイック切替",
   "activeProcesses": "アクティブなプロセス",
+  "activeProcessesHint": "プロセス検出を有効にすると表示",
   "networkEnvironment": "ネットワーク環境",
   "currentNode": "現在のノード"
 }

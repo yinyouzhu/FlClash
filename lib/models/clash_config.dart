@@ -2122,7 +2122,11 @@ abstract class PatchClashConfig with _$PatchClashConfig {
     @Default(false) @JsonKey(name: 'allow-lan') bool allowLan,
     @Default(LogLevel.error) @JsonKey(name: 'log-level') LogLevel logLevel,
     @Default(false) bool ipv6,
-    @Default(FindProcessMode.off)
+    // Process attribution needs no TUN on desktop: the core reads the OS
+    // socket table and matches a connection's source endpoint to a PID, so
+    // the dashboard's process card has data in plain system-proxy mode too.
+    // Off remains the fallback for unknown values from a profile.
+    @Default(FindProcessMode.always)
     @JsonKey(name: 'find-process-mode', unknownEnumValue: FindProcessMode.off)
     FindProcessMode findProcessMode,
     @Default(InterfaceNameMode.clear)

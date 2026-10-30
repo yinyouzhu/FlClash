@@ -374,4 +374,14 @@ abstract final class DashboardText {
 
   static TextStyle rowTitle(BuildContext context) =>
       AppTextStyle.subheadline.of(context, emphasized: true);
+
+  /// A process row's app name: 13 pt, the size Loon gives it. The card holds
+  /// four rows and three numeric columns besides, so the subheadline step used
+  /// elsewhere left names truncated to a few letters.
+  static TextStyle processName(BuildContext context) => AppTextStyle.custom(
+    context,
+    size: 13,
+    leading: 17,
+    weight: FontWeight.w500,
+  );
 }

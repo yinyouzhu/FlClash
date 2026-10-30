@@ -234,6 +234,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionUpdateProfiles": MessageLookupByLibrary.simpleMessage("更新全部配置"),
     "actionView": MessageLookupByLibrary.simpleMessage("显示/隐藏"),
     "activeProcesses": MessageLookupByLibrary.simpleMessage("活跃进程"),
+    "activeProcessesHint": MessageLookupByLibrary.simpleMessage("开启“查找进程”后显示"),
     "add": MessageLookupByLibrary.simpleMessage("添加"),
     "addCustomProxy": MessageLookupByLibrary.simpleMessage("添加代理"),
     "addFilters": MessageLookupByLibrary.simpleMessage("添加筛选"),

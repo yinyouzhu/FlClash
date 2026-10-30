@@ -238,6 +238,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionUpdateProfiles": MessageLookupByLibrary.simpleMessage("프로필 업데이트"),
     "actionView": MessageLookupByLibrary.simpleMessage("표시/숨기기"),
     "activeProcesses": MessageLookupByLibrary.simpleMessage("활성 프로세스"),
+    "activeProcessesHint": MessageLookupByLibrary.simpleMessage("프로세스 찾기를 켜면 표시됩니다"),
     "add": MessageLookupByLibrary.simpleMessage("추가"),
     "addCustomProxy": MessageLookupByLibrary.simpleMessage("프록시 추가"),
     "addFilters": MessageLookupByLibrary.simpleMessage("필터 추가"),
